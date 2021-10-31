@@ -13,6 +13,7 @@ $pagetitle = 'Schools';
 $subtitle = 'Schools List';
 $result = [];
 $toggleaddbutton = 1;
+$breadcrumbtitles = 1;
 
 /*school adding */
 if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
@@ -27,7 +28,6 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
     ,'landline' => $_POST['landline']
  ];
  $result = json_decode(apicall($addarr),true);
-    
 }
 
 ?>
@@ -130,9 +130,9 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
       <div class="modal-body">
         <form method="post" action="" id="addschoolform" autocomplete="off">  
         <?php
-   $rand=rand();
-   $_SESSION['rand']=$rand;
-  ?>
+            $rand=rand();
+            $_SESSION['rand']=$rand;
+        ?>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group row">
@@ -178,7 +178,8 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
                 </div>
             </div>
         </div> 
-        
+        </form>
+
 
       </div>
       <div class="modal-footer">
@@ -191,7 +192,7 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
 
 
 
- <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg " role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -213,13 +214,13 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
                 <div class="form-group row">
                     <label for="address" class="col-md-3">Address</label>
                     <div class="col-md-9">
-                        <textarea class="form-control" id="update_address" name="address" automcomplete="off" required/></textarea>
+                       <textarea class="form-control" id="update_address" name="address" automcomplete="off" required/></textarea>
                     </div>
                 </div>
                 <div class = "form-group row">
                     <label for = "registration_number" class = "col-md-3 control-label">Registration Number :</label>
                     <div class = "col-md-9">
-                        <input type="text" class="form-control" id="update_registration_number" name="registration_number" automcomplete="off" required/>
+                         <input type="text" class="form-control" id="update_registration_number" name="registration_number" automcomplete="off" required/>
                     </div>
                 </div>
             </div>
@@ -227,13 +228,13 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
                 <div class="form-group row">
                     <label for="email" class="col-md-3">Email</label>
                     <div class="col-md-9">
-                    <input type="email" class="form-control" id="update_email" name="email" automcomplete="off" />
+                   <input type="email" class="form-control" id="update_email" name="email" automcomplete="off" />
                     </div>
                 </div>
                 <div class = "form-group row">
                     <label for = "mobile" class = "col-md-3 control-label">Phone Number :</label>
                     <div class = "col-md-9">
-                    <input type="text" class="form-control" id="update_mobile" name="mobile" automcomplete="off" />
+                   <input type="text" class="form-control" id="update_mobile" name="mobile" automcomplete="off" />
                     </div>
                 </div>            
 
@@ -246,7 +247,8 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
                 </div>
             </div>
         </div> 
-        
+        </form>
+
 
       </div>
       <div class="modal-footer">
@@ -256,7 +258,7 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
     </div>
   </div>
 </div>
-
+ 
 
 
 
@@ -266,7 +268,7 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
 $("#addschoolsubmitid").click(function(){
 		var user_input_value;
 		var err_value = 0
-		$('#addschoolform').find('input,select,select2').each(function(){
+		$('#addschoolform').find('input,select,select2,textarea').each(function(){
             if($(this).prop('required')){
                 
 				user_input_value  = $("#"+this.id).val();
@@ -293,7 +295,7 @@ $("#addschoolsubmitid").click(function(){
 
     $(document).ready(function() {
     $("#updateschoolsubmitid").click(function(){
-        
+
 		var user_input_value;
 		var err_value = 0
 		$('#updateschoolform').find('input,select,textarea').each(function(){

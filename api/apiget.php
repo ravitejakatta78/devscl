@@ -6,6 +6,7 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 header('Cache-Control: no-cache, must-revalidate');
 header('Content-type: application/json'); 
+
 function validate_users($authtoken,$usersid){
 	
 
@@ -38,7 +39,7 @@ if(!empty($usersid)){
     $headerslist = apache_request_headers();
     if(!empty($headerslist['Authorization'])){
         $usertoken = validate_users($headerslist['Authorization'],$usersid);
-         if(empty($usertoken)){
+        if(empty($usertoken)){
             $userdetails = runQuery("select * from users where ID = '".$usersid."'");
 	        if(!empty($userdetails['id'])){
                 $action = mysqli_real_escape_string($conn,trim($_GET['action']));
@@ -48,6 +49,10 @@ if(!empty($usersid)){
                             $school_list = runloopQuery("select * from schools order by id desc");
                             $payload = array('status'=>'1','school_list' => $school_list,'message'=>'Schools List');
                           break;
+                        case 'get-subjects-list':
+                            $subject_list = runloopQuery("select * from subjects where school_id = '".$_GET['school_id']."'order by id desc");
+                            $payload = array('status'=>'1','subject_list' => $subject_list,'message'=>'Subjects List');
+                            break;  
                           default:
                             $payload = array('status'=>'0','message'=>'Please specify a valid action');
                            break;

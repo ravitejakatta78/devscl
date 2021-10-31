@@ -10,3 +10,6 @@
     <link href="../assets/css/animate.css" rel="stylesheet">
     <link href="../assets/css/style.css" rel="stylesheet">
     <link href="../assets/css/custom.css" rel="stylesheet">
+
+
+    <script src='https://kit.fontawesome.com/a076d05399.js' ></script>

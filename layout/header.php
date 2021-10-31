@@ -12,7 +12,7 @@
                 <li style="padding: 20px">
                     <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
                 </li>
-                <li class="dropdown">
+                <li class="dropdown envelopeanchor">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                         <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
                     </a>
@@ -110,13 +110,8 @@
 
 
                 <li>
-                    <a href="login.html">
-                        <i class="fa fa-sign-out"></i> Log out
-                    </a>
-                </li>
-                <li>
-                    <a class="right-sidebar-toggle">
-                        <i class="fa fa-tasks"></i>
+                    <a href="../logout.php">
+                        <i class="fa fa-power-off fa-lg"></i>
                     </a>
                 </li>
             </ul>

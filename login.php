@@ -1,12 +1,74 @@
 <!DOCTYPE html>
 <html>
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>INSPINIA | Login 2</title>
+
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="assets/css/animate.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <script src="assets/js/jquery-3.1.1.min.js"></script>
+<style>
+@media all and (max-width: 480px) {
+  #welcomemsg {
+    display: none;
+  }
+}
+    </style>
+<script>
+
+
+$(function() {
+    $.post('login.php', { width: screen.width, height:screen.height }, function(json) {
+        alert("sda");
+        if(json.outcome == 'success') {
+            // do something with the knowledge possibly?
+        } else {
+            alert('Unable to let PHP know what the screen resolution is!');
+        }
+    },'json');
+});
+
+    </script>
+
+
+</head>
+
+
 <?php
 session_start();
 error_reporting(E_ALL); 
 include('common.php');
+if($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['width']) ) {	
+    if(isset($_POST['width']) && isset($_POST['height'])) {
+        $_SESSION['screen_width'] = $_POST['width'];
+
+    }
+}
+if(@$_SESSION['screen_width'] <= 500 ) {
+    $device = 'mobile';
+}
+else{
+    $device = 'lg_device';
+}
+if($device == 'mobile'){
+    $url = 'school/dashboard-mobile.php';
+}else{
+   $url = 'admin/schools.php';      
+}
 $userid = current_userid(); 
-if(!empty($userid)){
-	//header("Location: loan.php");
+    if(!empty($userid)){
+        if($userid == 1){ //admin
+            $url = 'admin/schools.php';
+        }
+        else{ //schools
+            $url = $url; 
+        }
+        header("Location: $url");
 	}
 	$message = '';
 	if($_SERVER["REQUEST_METHOD"] == "POST") {	
@@ -16,12 +78,12 @@ if(!empty($userid)){
 	if(!empty($_POST['password'])){		
 	$mymailid = mysqli_real_escape_string($conn,$_POST['username']);	
 	$mypassword = mysqli_real_escape_string($conn,$_POST['password']); 	
-	$row = runQuery("SELECT * FROM users WHERE user_name = '".$mymailid."'");	
+	$row = runQuery("SELECT * FROM users WHERE user_name = '".$mymailid."' or user_email = '".$mymailid."'");	
  	if(!empty($row['id'])){	
 	if(($row['user_password']) == md5($mypassword) ){	
 	    $_SESSION['sessionusersid'] = $row['id']; 
         
-        header("Location: admin/addschool.php");
+        header("Location: $url");
 	} else {			
 	$message .= "Your Login password is invalid";	
 	}		
@@ -37,27 +99,13 @@ if(!empty($userid)){
 	}	
 	}
 	?>
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>INSPINIA | Login 2</title>
-
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet">
-
-    <link href="assets/css/animate.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-
-</head>
 
 <body class="gray-bg">
 
     <div class="loginColumns animated fadeInDown">
         <div class="row">
 
-            <div class="col-md-6">
+            <div class="col-md-6" id="welcomemsg">
                 <h2 class="font-bold">Welcome to IN+</h2>
 
                 <p>

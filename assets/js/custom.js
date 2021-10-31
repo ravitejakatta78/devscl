@@ -35,3 +35,17 @@ $(document).ready(function() {
 
 });
 
+function changeSubjectStatus(userid,subject_id,checkedval){
+    
+    var action = 'update-subject-status';
+    
+     $.ajax({
+        url: "../ajax/commonajax.php",
+        type: "POST",
+        data: {usersid :userid,subject_id:subject_id,action:action},
+      }).done(function(msg) {
+        
+      });
+      
+}
+
