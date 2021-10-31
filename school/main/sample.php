@@ -27,7 +27,6 @@ $breadcrumbtitles = 1;
         <?php require_once('../layout/headerscripts.php'); ?>
 
 </head>
-
 <body>
     <div id="wrapper">
         <?php require_once('../layout/sidebar.php'); ?>
