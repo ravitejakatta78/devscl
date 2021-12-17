@@ -45,11 +45,12 @@ if(!empty($usersid)){
                 if(!empty($action)){ 
                     switch($action){ 
                         case 'get-school-list':
-                            $school_list = runloopQuery("select * from schools order by id desc");
-                            $payload = array('status'=>'1','school_list' => $school_list,'message'=>'Schools List');
+                            $school_list = [];
+                            $school_list = runQuery("select * from schools where id = '".$userdetails['school_id']."'");
+                            $payload = array('status'=>'200','school_list' => $school_list,'message'=>'School Details');
                           break;
                           default:
-                            $payload = array('status'=>'0','message'=>'Please specify a valid action');
+                            $payload = array('status'=>'400','message'=>'Please specify a valid action');
                            break;
                         }
                     }

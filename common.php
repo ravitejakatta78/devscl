@@ -10,6 +10,8 @@ define('SITE_URL','http://localhost/devs1/');
 define('SCHOOL_NAME','INSPINIA');
 
 define('SCHOOL_TOKEN','$CH0O1');
+define('ROLES',['1' => 'Admin','2' => 'School Admin','3' => 'Faculity','4' => 'Student', '5' => 'Parent']) ;
+define('GENDER',['1' => 'Male', '2' => 'Female', '3' => 'Others']) ;
 
 include('dbconfig.php');
 
