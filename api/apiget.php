@@ -76,7 +76,7 @@ if(!empty($usersid)){
                             }
                             $studentList = runloopQuery($studentList);
 
-                            $payload = array('status'=>'200','faculityList' => $studentList,'message'=>'Student Details');
+                            $payload = array('status'=>'200','studentList' => $studentList,'message'=>'Student Details');
                         break;    
                         default:
                             $payload = array('status'=>'400','message'=>'Please specify a valid action');
