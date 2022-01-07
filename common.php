@@ -22,7 +22,7 @@ function insertQuery($query,$table){
 
 	include('dbconfig.php');
 
-	$query['reg_date'] = date('Y-m-d H:i:s');
+	//$query['reg_date'] = date('Y-m-d H:i:s');
 
 	$keys = array_keys($query);
 
@@ -63,7 +63,7 @@ function insertIDQuery($query,$table){
 
 	include('dbconfig.php');
 
-	$query['reg_date'] = date('Y-m-d H:i:s');
+	//$query['reg_date'] = date('Y-m-d H:i:s');
 
 	$keys = array_keys($query);
 
@@ -88,7 +88,7 @@ if($e != sizeof($keys)-1) { $sql .= ','; }
 }
 
 
-
+//echo $sql;exit;
 $result = mysqli_query($conn,$sql);
 
 if($result) {
@@ -297,4 +297,23 @@ function apicall($arr)
         $result = file_get_contents($url_path, false, $context);
     }
     return $result;
+}
+
+
+function user_details($userid,$column=null) {
+    include('dbconfig.php');
+    $details = '';
+    if(!empty($userid)){
+        $userdetails = runQuery("select * from users where id = $userid");
+        
+        
+        if(!empty($column)) {
+            $details = $userdetails[$column];
+        }
+        else {
+            $details = $userdetails;
+        }
+    }
+    return $details;
+
 }

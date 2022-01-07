@@ -127,12 +127,12 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+    <div class="modal-body">
         <form method="post" action="" id="addschoolform" autocomplete="off">  
-        <?php
-   $rand=rand();
-   $_SESSION['rand']=$rand;
-  ?>
+            <?php
+            $rand=rand();
+            $_SESSION['rand']=$rand;
+            ?>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group row">
@@ -171,15 +171,15 @@ if(!empty($_POST['addsclsubmit']) &&  $_POST['randcheck'] == $_SESSION['rand'])
                 <div class = "form-group row">
                     <label for = "landline" class = "col-md-3 control-label">Landline :</label>
                     <div class = "col-md-9">
-                    <input type="text" class="form-control" id="landline" name="landline" automcomplete="off" />
-                    <input type="hidden" class="form-control" id="addsclsubmit" name="addsclsubmit" value="<?= $addvalue ?? 1; ?>" />
-                    <input type="hidden" value="<?php echo $rand; ?>" name="randcheck" />
-                </div>
+                        <input type="text" class="form-control" id="landline" name="landline" automcomplete="off" />
+                        <input type="hidden" class="form-control" id="addsclsubmit" name="addsclsubmit" value="<?= $addvalue ?? 1; ?>" />
+                        <input type="hidden" value="<?php echo $rand; ?>" name="randcheck" />
+                    </div>
                 </div>
             </div>
         </div> 
         
-
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
