@@ -16,8 +16,7 @@ $result = [];
 //$result = ['status' => '1', 'message' => 'Added Successfully'];
 $school_id = user_details($userid,'school_id');
 $user_name = user_details($userid,'user_name');
-
-if(!empty($_POST['addfacsubmit'])){
+if(!empty($_POST['addfacsubmit']) &&  ($_POST['randcheck'] == $_SESSION['rand'])){
     $faculityadd = [];
     $faculityadd['faculity_name'] = $_POST['faculity_name'];
     $faculityadd['qualification'] = $_POST['qualification'];
@@ -33,14 +32,47 @@ if(!empty($_POST['addfacsubmit'])){
     $faculityadd['created_by'] = $user_name;
     $faculityadd['updated_by'] = $user_name;
 
+    if(!empty($_FILES['faculity_pic']['name'])){
+        $new_name = uploadProfilePic($_FILES['faculity_pic'],$school_id);
+        $faculityadd['faculity_pic'] = $new_name;
+    }
+
+
     $faculity_id = insertIDQuery($faculityadd,'faculity');
+    
+    
 
     if(!empty($faculity_id)){
-        $result = ['status' => '1', 'message' => 'Added Successfully'];
+        $result = ['status' => '1', 'message' => 'Added Faculity Successfully'];
     }
     else{
         $result = ['status' => '0', 'message' => 'Error While Adding Faculity'];
     }
+
+    
+}
+
+
+if(!empty($_POST['update_facsubmit'])) {
+    $facupdated = [];
+    $updatecondition = [];
+    $facupdated['faculity_name'] = $_POST['updatefaculity_name'];
+    $facupdated['qualification'] = $_POST['update_qualification'];
+    $facupdated['subject_id'] = $_POST['update_subject_id'];
+    $facupdated['school_id'] = $school_id;
+    $facupdated['email'] = $_POST['update_email'];
+    $facupdated['mobile'] = $_POST['update_mobile'];
+    $facupdated['gender'] = $_POST['update_gender'];
+    $facupdated['address'] = $_POST['update_address'];
+    $facupdated['updated_on'] = date('Y-m-d H:i:s');
+    $facupdated['updated_by'] = $user_name;
+    $updatecondition['id'] = $_POST['update_facsubmit']; 
+    if(!empty($_FILES['update_faculity_pic']['name'])){
+        $new_name = uploadProfilePic($_FILES['update_faculity_pic'],$school_id);
+        $facupdated['faculity_pic'] = $new_name;
+    }
+    updateQuery($facupdated,'faculity',$updatecondition);
+    $result = ['status' => '1', 'message' => 'Updated Successfully'];
 }
 
 $subject_list = runloopQuery("select * from subjects where school_id = '".$school_id."'");
@@ -48,6 +80,20 @@ $subject_list = runloopQuery("select * from subjects where school_id = '".$schoo
 $faculity_list = runloopQuery("select f.*,s.subject_name from faculity as f inner join subjects as s
 on f.subject_id = s.id where f.school_id = '".$school_id."'");
 //echo "<pre>";print_r($faculity_list);exit;
+
+function uploadProfilePic($profile_pic,$school_id){
+    $faculity_pic = $profile_pic['name'];
+    $tmp_name = $profile_pic['tmp_name'];
+    $pic_extension = pathinfo($faculity_pic, PATHINFO_EXTENSION);
+    $new_name = date('YmdHis',time()).mt_rand().'.'.$pic_extension;
+    $path = '../../school_docs/'.$school_id.'/faculity_docs/';
+    if (!is_dir($path)) {
+        mkdir($path, 0777, true);
+    }
+    move_uploaded_file($tmp_name,$path.'/'.$new_name);
+    return $new_name;
+
+}
 
 ?>
 <head>
@@ -138,7 +184,7 @@ on f.subject_id = s.id where f.school_id = '".$school_id."'");
         </button>
       </div>
     <div class="modal-body">
-        <form method="post" action="" id="addfaculityform" autocomplete="off">  
+        <form method="post" action="" id="addfaculityform" autocomplete="off" enctype="multipart/form-data">  
             <?php
             $rand=rand();
             $_SESSION['rand']=$rand;
@@ -166,7 +212,7 @@ on f.subject_id = s.id where f.school_id = '".$school_id."'");
                 <div class="form-group row">
                     <label for="subject_id" class="col-md-3">Subject</label>
                     <div class="col-md-9">
-                        <select id="subject_id" name="subject_id">
+                        <select id="subject_id" name="subject_id" class="form-control">
                             <option value="">Select Subject</option>
                             <?php for($s=0;$s<count($subject_list);$s++) { ?>
                                 <option value="<?php echo $subject_list[$s]['id']; ?>"><?php echo $subject_list[$s]['subject_name']; ?></option>
@@ -191,16 +237,23 @@ on f.subject_id = s.id where f.school_id = '".$school_id."'");
                 <div class = "form-group row">
                     <label for = "gender" class = "col-md-3 control-label">Gender</label>
                     <div class = "col-md-9">
-                        <select id="gender" name="gender">
+                        <select id="gender" name="gender" class="form-control">
                             <option value="">Select Gender</option>
                             <option value="1">Male</option>
                             <option value="2">Female</option>
                         </select>
                     </div>
+                </div>
+                <div class = "form-group row">
+                    <label for = "faculity_pic" class = "col-md-3 control-label">Faculity Picture</label>
+                    <div class = "col-md-9">
+                    <input type="file" class="form-control" id="faculity_pic" name="faculity_pic" automcomplete="off" />
+                    </div>
                 </div>                          
             </div>
         </div>
         <input type="hidden" id="addfacsubmit" name="addfacsubmit" value="1"/> 
+        <input type="hidden" value="<?php echo $rand; ?>" name="randcheck" />
         
         </form>
       </div>
@@ -222,11 +275,8 @@ on f.subject_id = s.id where f.school_id = '".$school_id."'");
         </button>
       </div>
     <div class="modal-body">
-        <form method="post" action="" id="updatefaculityform" autocomplete="off">  
-            <?php
-            $rand=rand();
-            $_SESSION['rand']=$rand;
-            ?>
+        <form method="post" action="" id="updatefaculityform" autocomplete="off" enctype="multipart/form-data">  
+           
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group row">
@@ -280,6 +330,12 @@ on f.subject_id = s.id where f.school_id = '".$school_id."'");
                             <option value="1">Male</option>
                             <option value="2">Female</option>
                         </select>
+                    </div>
+                </div>
+                <div class = "form-group row">
+                    <label for = "faculity_pic" class = "col-md-3 control-label">Faculity Picture</label>
+                    <div class = "col-md-9">
+                    <input type="file" class="form-control" id="update_faculity_pic" name="update_faculity_pic" automcomplete="off" />
                     </div>
                 </div>                          
             </div>
@@ -340,6 +396,7 @@ on f.subject_id = s.id where f.school_id = '".$school_id."'");
             $("#update_email").val(faculity_list_array['email']);
             $("#update_mobile").val(faculity_list_array['mobile']);
             $("#update_gender").val(faculity_list_array['gender']);
+            $("#update_faculity_pic").val(faculity_list_array['faculity_pic']);
         })
         $("#updateModal").modal('show');
         $("#update_facsubmit").val(faculiyid);

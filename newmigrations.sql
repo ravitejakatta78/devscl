@@ -1,0 +1,1 @@
+ALTER TABLE `faculity` ADD `faculity_pic` VARCHAR(100) NULL DEFAULT NULL AFTER `id`;
