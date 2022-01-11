@@ -77,6 +77,11 @@ if(!empty($usersid)){
                             $studentList = runloopQuery($studentList);
 
                             $payload = array('status'=>'200','studentList' => $studentList,'message'=>'Student Details');
+                        break;
+                        case 'subjectList':
+                            $subjectList = [];
+                            $subjectList = runloopQuery("select * from subjects where school_id = '".$userdetails['school_id']."'");
+                            $payload = array('status'=>'200','studentList' => $subjectList,'message'=>'Subject Details');
                         break;    
                         default:
                             $payload = array('status'=>'400','message'=>'Please specify a valid action');
