@@ -88,7 +88,7 @@ if($e != sizeof($keys)-1) { $sql .= ','; }
 }
 
 
-echo $sql;exit;
+//echo $sql;exit;
 $result = mysqli_query($conn,$sql);
 
 if($result) {

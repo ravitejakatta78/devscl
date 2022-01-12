@@ -29,12 +29,30 @@ if(!empty($_POST['addclasssub'])) {
     $addclass['created_by'] = $user_name;
 
     $class_id = insertIDQuery($addclass,'classes');
+    
+    if($class_id) {
+        addSections($_POST['section_name'],$_POST['faculity_id'],$class_id,$school_id,$user_name);
+    }
 
-    if(!empty(array_filter($_POST['section_name']))) {
-        for($i=0;$i<count($_POST['section_name']);$i++) {
-            $sections['section_name'] = $_POST['section_name'][$i];
-            $sections['teacher_id'] = $_POST['faculity_id'][$i];
-            $sections['class_id'] = $class_id;
+    if(!empty($class_id)) {
+        $result = ['status' => '1', 'message' => 'Added Successfully'];  
+    }
+    else{
+        $result = ['status' => '0', 'message' => 'Error While Adding']; 
+    }
+}
+
+if(!empty($_POST['addsectionsub'])) {
+    $add_class_id = $_POST['add_class_id'];
+    addSections($_POST['section_name'],$_POST['faculity_id'],$add_class_id,$school_id,$user_name);
+}
+
+function addSections($sectionname,$faculityArray,$cl_id,$school_id,$user_name){
+    if(!empty(array_filter($sectionname))) {
+        for($i=0;$i<count($sectionname);$i++) {
+            $sections['section_name'] = $sectionname[$i];
+            $sections['teacher_id'] = $faculityArray[$i];
+            $sections['class_id'] = $cl_id;
             $sections['school_id'] = $school_id;
             $sections['section_status'] = 1;
             $sections['created_by'] = $user_name;
@@ -43,13 +61,6 @@ if(!empty($_POST['addclasssub'])) {
             $sections['updated_by'] = $user_name;
             $result = insertQuery($sections,'class_sections');
         }
-    }
-
-    if(!empty($class_id)) {
-        $result = ['status' => '1', 'message' => 'Added Successfully'];  
-    }
-    else{
-        $result = ['status' => '0', 'message' => 'Error While Adding']; 
     }
 }
 
@@ -115,7 +126,8 @@ on c.teacher_id = f.id where c.school_id = '".$school_id."'");
                                                 <th scope="col" class="sort" data-sort="name">ID</th>
                                                 <th scope="col" class="sort" data-sort="name">Class Name</th>
                                                 <th scope="col" class="sort" data-sort="budget">Faculity Name</th>
-                                                <th scope="col" class="sort" data-sort="budget">Section Name</th>
+                                                <th scope="col" class="sort" data-sort="budget">Sections</th>
+                                                <th scope="col" class="sort" data-sort="budget">Add Section</th>
                                                 <th scope="col" class="sort" data-sort="budget">Update</th>
                                             </tr>
                                         </thead>
@@ -127,6 +139,8 @@ on c.teacher_id = f.id where c.school_id = '".$school_id."'");
                                                     <td><?php echo $classes_list[$c]['faculity_name']; ?></td>
                                                     <td><button onclick="display_sections('<?php echo $classes_list[$c]['id']; ?>')" type="button" class="btn btn-sm btn-white">
                                                     <i class="fa fa-eye"></button></td>
+                                                    <td><button onclick="add_sections('<?php echo $classes_list[$c]['id']; ?>')" type="button" class="btn btn-sm btn-white">
+                                                    <i class="fa fa-plus"></button></td>
                                                     <td><button onclick="update_class('<?php echo $classes_list[$c]['id']; ?>')" type="button" class="btn btn-sm btn-white">
                                                     <i class="fa fa-pencil"></button></td>
                                                     
@@ -223,6 +237,57 @@ on c.teacher_id = f.id where c.school_id = '".$school_id."'");
   </div>
 </div> <!--add class over-->
 
+<div class="modal fade" id="addsectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLabel">Sections</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <div class="modal-body">
+        <form method="post" action="" id="addsectionform" autocomplete="off">
+                <table id="tblAddRowMore" class="table table-bordered table-striped mt-2">
+						<thead>
+							<tr>
+							    <th>Section Name</th>
+                                <th>Faculity</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+							    <td>
+								<input type="text" name="section_name[]" id="section_name" class="form-control">
+								</td>
+                                <td>
+                                    <select name="faculity_id[]" id="faculity_id" class="form-control">
+                                    <option value="">Select Faculity</option>
+                                    <?php for($f=0;$f<count($faculity_details);$f++) { ?>
+                                        <option value="<?php echo $faculity_details[$f]['id']; ?>"><?php echo $faculity_details[$f]['faculity_name']; ?></option>
+                                    <?php } ?>
+                                    </select>
+                                </td>
+							</tr>
+						</tbody>
+			    </table>
+
+					<div class="modal-footer">
+							<button id="btnAddRowMore" class="btn btn-success" type="button" >Add Row</button>
+					</div> 
+                    <input type="hidden" id="addsectionsub" name="addsectionsub" value="2"/>
+                    <input type="hidden" id="add_class_id" name="add_class_id" >
+        </form>
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="addsectionsubmitid">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg " role="document">
     <div class="modal-content">
@@ -234,10 +299,7 @@ on c.teacher_id = f.id where c.school_id = '".$school_id."'");
         </div>
     <div class="modal-body">
         <form method="post" action="" id="updateclassform" autocomplete="off">  
-        <?php
-            $rand=rand();
-            $_SESSION['rand']=$rand;
-        ?>
+        
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group row">
@@ -280,7 +342,7 @@ on c.teacher_id = f.id where c.school_id = '".$school_id."'");
             </button>
         </div>
     <div class="modal-body">
-        <table>
+        <table class="table table-bordered table-striped mt-2">
             <tr>
                 <th>S.No</th>
                 <th>Class Name</th>
@@ -294,11 +356,11 @@ on c.teacher_id = f.id where c.school_id = '".$school_id."'");
     </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="updateclasssubmitid">Save changes</button>
       </div>
     </div>
   </div>
 </div>
+
 
 <script>
     $("#addclasssubmitid").click(function(){
@@ -329,20 +391,30 @@ on c.teacher_id = f.id where c.school_id = '".$school_id."'");
 		
 	});
 
-    $('#tblAddRow tbody tr').find('td').parent() 
+    $('#tblAddRow,#tblAddRowMore tbody tr').find('td').parent() 
     		.append('<td><a href="#" class="delrow"><i class="fa fa-trash border-red text-red"></i></a></td>');
 
 
 		// Add row the table
-		$('#btnAddRow').on('click', function() {
+		$('#btnAddRow,#btnAddRowMore').on('click', function() {
 		    var lastRow = $('#tblAddRow tbody tr:last').html();
 		    //alert(lastRow);
-		    $('#tblAddRow tbody').append('<tr>' + lastRow + '</tr>');
-		    $('#tblAddRow tbody tr:last input').val('');
+		    $('#tblAddRow,#tblAddRowMore tbody').append('<tr>' + lastRow + '</tr>');
+		    $('#tblAddRow,#tblAddRowMore tbody tr:last input').val('');
 		});
 
         // Delete row on click in the table
-		$('#tblAddRow').on('click', 'tr a', function(e) {
+		$('#tblAddRowMore').on('click', 'tr a', function(e) {
+		    var lenRow = $('#tblAddRowMore tbody tr').length;
+		    e.preventDefault();
+		    if (lenRow == 1 || lenRow <= 1) {
+		        alert("Can't remove all row!");
+		    } else {
+		        $(this).parents('tr').remove();
+		    }
+		});
+
+        $('#tblAddRow').on('click', 'tr a', function(e) {
 		    var lenRow = $('#tblAddRow tbody tr').length;
 		    e.preventDefault();
 		    if (lenRow == 1 || lenRow <= 1) {
@@ -394,6 +466,15 @@ on c.teacher_id = f.id where c.school_id = '".$school_id."'");
             $("#sectionModal").modal('show');
         })
     }
+
+    function add_sections(cls_id) {
+       // alert(cls_id);
+        $("#addsectionModal").modal('show');
+        $("#add_class_id").val(cls_id);
+    }
+    $("#addsectionsubmitid").click(function(){
+        $("#addsectionform").submit();
+    });
 
 </script>
 </body>
