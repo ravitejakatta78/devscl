@@ -7,6 +7,8 @@ ini_set('log_errors', 'On');
 
 define('SITE_URL','http://localhost/devs1/');
 
+define('SERVER_URL','http://localhost/');
+
 define('SCHOOL_NAME','INSPINIA');
 
 define('SCHOOL_TOKEN','$CH0O1');
@@ -315,5 +317,19 @@ function user_details($userid,$column=null) {
         }
     }
     return $details;
+
+}
+
+function uploadProfilePic($profile_pic,$school_id){
+    $faculity_pic = $profile_pic['name'];
+    $tmp_name = $profile_pic['tmp_name'];
+    $pic_extension = pathinfo($faculity_pic, PATHINFO_EXTENSION);
+    $new_name = date('YmdHis',time()).mt_rand().'.'.$pic_extension;
+    $path = '../../school_docs/'.$school_id.'/faculity_docs/';
+    if (!is_dir($path)) {
+        mkdir($path, 0777, true);
+    }
+    move_uploaded_file($tmp_name,$path.'/'.$new_name);
+    return $new_name;
 
 }

@@ -68,6 +68,38 @@ if(!empty($headerslist['Authorization'])){
                             $payload = array('status'=>'400','message' => 'Missing Required Parameters');    
                         }
                     break;
+                    case 'add-faculity':
+                        if(!empty($_POST['faculity_name']) && !empty($_POST['qualification'])){
+                            $faculityadd = [];
+                            $faculityadd['faculity_name'] = $_POST['faculity_name'];
+                            $faculityadd['qualification'] = $_POST['qualification'];
+                            $faculityadd['subject_id'] = $_POST['subject_id'];
+                            $faculityadd['school_id'] = $userdetails['school_id'];
+                            $faculityadd['email'] = $_POST['email'];
+                            $faculityadd['mobile'] = $_POST['mobile'];
+                            $faculityadd['gender'] = $_POST['gender'];
+                            $faculityadd['address'] = $_POST['address'];
+                            $faculityadd['status'] = 1;
+                            $faculityadd['created_on'] = date('Y-m-d H:i:s');
+                            $faculityadd['updated_on'] = date('Y-m-d H:i:s');
+                            $faculityadd['created_by'] = $userdetails['user_name'];
+                            $faculityadd['updated_by'] = $userdetails['user_name'];
+                            if(!empty($_FILES['faculity_pic']['name'])){
+                                $new_name = uploadProfilePic($_FILES['faculity_pic'],$userdetails['school_id']);
+                                $faculityadd['faculity_pic'] = $new_name;
+                            }
+                            $faculity_id = insertIDQuery($faculityadd,'faculity');
+                            if(!empty($faculity_id)){
+                                $payload = ['status' => '1', 'message' => 'Added Faculity Successfully'];
+                            }
+                            else{
+                                $payload = ['status' => '0', 'message' => 'Error While Adding Faculity'];
+                            }
+                        }
+                        else{
+                            $payload = ['status' => '0', 'message' => 'Please Provide Required Parameters'];
+                        }
+                    break;    
                       default:
                         $payload = array('status'=>'0','message'=>'Please specify a valid action');
                        break;

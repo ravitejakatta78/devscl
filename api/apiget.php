@@ -58,9 +58,23 @@ if(!empty($usersid)){
                         break;
                         case 'faculityList':
                             $faculityList = [];
-                            $faculityList = runloopQuery("select f.*,subject_name from faculity f 
+                            $faculitySql = runloopQuery("select f.*,subject_name from faculity f 
                             inner join subjects s on f.subject_id  = s.id 
                             where f.school_id = {$userdetails['school_id']}  AND f.status = ".ACTIVE );
+                            foreach($faculitySql as $faculity) {
+                                $faculitySingle['id'] = $faculity['id'];
+                                $faculitySingle['faculity_name'] = $faculity['faculity_name'];
+                                $faculitySingle['address'] = $faculity['address'];
+                                $faculitySingle['qualification'] = $faculity['qualification'];
+                                $faculitySingle['subject_id'] = $faculity['subject_id'];
+                                $faculitySingle['school_id'] = $faculity['school_id'];
+                                $faculitySingle['status'] = $faculity['status'];
+                                $faculitySingle['email'] = $faculity['email'];
+                                $faculitySingle['mobile'] = $faculity['mobile'];
+                                $faculitySingle['gender'] = $faculity['gender'];
+                                $faculitySingle['faculity_pic'] = SERVER_URL.'/school_docs/'.$faculity['school_id'].'/faculity_docs/'.$faculity['faculity_pic'];
+                                $faculityList[] = $faculitySingle;
+                            }
                             $payload = array('status'=>'200','faculityList' => $faculityList,'message'=>'Faculity Details');
                         break;
                         case 'studentList':
@@ -81,7 +95,7 @@ if(!empty($usersid)){
                         case 'subjectList':
                             $subjectList = [];
                             $subjectList = runloopQuery("select * from subjects where school_id = '".$userdetails['school_id']."'");
-                            $payload = array('status'=>'200','studentList' => $subjectList,'message'=>'Subject Details');
+                            $payload = array('status'=>'200','subjectList' => $subjectList,'message'=>'Subject Details');
                         break;    
                         default:
                             $payload = array('status'=>'400','message'=>'Please specify a valid action');

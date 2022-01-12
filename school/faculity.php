@@ -81,19 +81,7 @@ $faculity_list = runloopQuery("select f.*,s.subject_name from faculity as f inne
 on f.subject_id = s.id where f.school_id = '".$school_id."'");
 //echo "<pre>";print_r($faculity_list);exit;
 
-function uploadProfilePic($profile_pic,$school_id){
-    $faculity_pic = $profile_pic['name'];
-    $tmp_name = $profile_pic['tmp_name'];
-    $pic_extension = pathinfo($faculity_pic, PATHINFO_EXTENSION);
-    $new_name = date('YmdHis',time()).mt_rand().'.'.$pic_extension;
-    $path = '../../school_docs/'.$school_id.'/faculity_docs/';
-    if (!is_dir($path)) {
-        mkdir($path, 0777, true);
-    }
-    move_uploaded_file($tmp_name,$path.'/'.$new_name);
-    return $new_name;
 
-}
 
 ?>
 <head>
