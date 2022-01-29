@@ -99,6 +99,62 @@ if(!empty($headerslist['Authorization'])){
                         else{
                             $payload = ['status' => '0', 'message' => 'Please Provide Required Parameters'];
                         }
+                    break;
+                    case 'add-student':
+                        $parentDetails = runQuery("select * from parents where phone = '".$_POST['phone']."'");
+                        if(!empty($parentDetails)){
+                            $parent_id = $parentDetails['id']; 
+                        }else{
+                            $parents['parent_name'] = $_POST['parent_name'];
+                            $parents['parent_type'] = $_POST['parent_type'];
+                            $parents['occupation'] = $_POST['occupation'];
+                            $parents['email'] = $_POST['email'];
+                            $parents['phone'] = $_POST['phone'];
+                            $parents['status'] = 1;
+                            $parents['created_by'] = $userdetails['user_name'];;
+                            $parents['updated_by'] = $userdetails['user_name'];;
+                            $parents['created_on'] = date('Y-m-d H:i:s');
+                            $parents['updated_on'] = date('Y-m-d H:i:s');
+                            $parents['reg_date'] = date('Y-m-d');
+                            $parent_id = insertIDQuery($parents,'parents');    
+                        }
+
+                        if(!empty($parent_id)) {
+                            $students['school_id'] = $userdetails['school_id'];
+                            $students['status'] = 1;
+                            $students['role_id'] = 4;
+                            $students['first_name'] = $_POST['first_name'];
+                            $students['last_name'] = $_POST['last_name'];
+                            $students['gender'] = $_POST['gender'];
+                            $students['dob'] = $_POST['dob'];
+                            $students['address'] = $_POST['address'];
+                            $students['roll_number'] = $_POST['roll_number'];
+                            $students['blood_group'] = $_POST['blood_group'];
+                            $students['religion'] = $_POST['religion'];
+                            $students['student_class'] = $_POST['student_class'];
+                            $students['admission_id'] = $_POST['admission_id'];
+                            $students['parent_id'] = $parent_id;
+                            if(!empty($_FILES['student_img']['name'])){
+                                $path = '../../school_docs/'.$userdetails['school_id'].'/student_image/';
+                                $new_name = upload_student_pic($_FILES['student_img'],$path);
+                                $students['student_img'] = $new_name;   
+                            }
+                            $students['created_by'] = $userdetails['user_name'];;
+                            $students['updated_by'] = $userdetails['user_name'];;
+                            $students['created_on'] = date('Y-m-d H:i:s');
+                            $students['updated_on'] = date('Y-m-d H:i:s');
+                            $students['reg_date'] = date('Y-m-d');
+
+                            $student_id = insertIDQuery($students,'students');
+                            if(!empty($student_id)) {
+                                $payload = ['status' => '1', 'message' => 'Added Student Successfully'];
+                            }
+                            else{
+                                $payload = ['status' => '0', 'message' => 'Error While Adding'];   
+                            }
+                        }else{
+                            $payload = ['status' => '0', 'message' => 'Error While Adding Parent Details'];
+                        }
                     break;    
                       default:
                         $payload = array('status'=>'0','message'=>'Please specify a valid action');

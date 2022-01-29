@@ -117,18 +117,6 @@ if(!empty($_POST['updatestudentsubmit'])){
     }
 }
 
-
-function upload_student_pic($studentimage,$path) {
-    $student_pic = $studentimage['name'];
-    $tmp_name = $studentimage['tmp_name'];
-    $pic_extension = pathinfo($student_pic, PATHINFO_EXTENSION);
-    $new_name = date('YmdHis',time()).mt_rand().'.'.$pic_extension;
-    if (!is_dir($path)) {
-        mkdir($path, 0777, true);
-    }
-    move_uploaded_file($tmp_name,$path.'/'.$new_name);
-    return $new_name;
-}
 $student_details = runloopQuery("select s.*,p.phone,c.class_name from students as s inner join parents as p
 on s.parent_id = p.id inner join classes as c on s.student_class = c.id where s.school_id = '".$school_id."'");
 //echo "<pre>";print_r($student_details);exit;
@@ -258,7 +246,7 @@ on s.parent_id = p.id inner join classes as c on s.student_class = c.id where s.
                             <option value="4">B-ve</option>
                             <option value="5">AB+ve</option>
                             <option value="6">O+ve</option>
-                            <option value="27">O-ve</option>
+                            <option value="7">O-ve</option>
                         </select>
                     </div>
                 </div>

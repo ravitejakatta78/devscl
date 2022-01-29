@@ -333,3 +333,15 @@ function uploadProfilePic($profile_pic,$school_id){
     return $new_name;
 
 }
+
+function upload_student_pic($studentimage,$path) {
+    $student_pic = $studentimage['name'];
+    $tmp_name = $studentimage['tmp_name'];
+    $pic_extension = pathinfo($student_pic, PATHINFO_EXTENSION);
+    $new_name = date('YmdHis',time()).mt_rand().'.'.$pic_extension;
+    if (!is_dir($path)) {
+        mkdir($path, 0777, true);
+    }
+    move_uploaded_file($tmp_name,$path.'/'.$new_name);
+    return $new_name;
+}
