@@ -26,6 +26,11 @@ if(!empty($_POST['action'])){
             where c.id = '".$_POST['c_id']."'");
             echo json_encode($sql);
         break;
+        case 'updateStudent':
+            $sql = runQuery("select * from students as s inner join parents as p on s.parent_id = p.id
+            where s.id = '".$_POST['student_id']."'");
+            echo json_encode($sql);
+        break;
         default:
         echo json_encode([]);
         break; 
