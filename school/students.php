@@ -96,6 +96,9 @@ if(!empty($_POST['updatestudentsubmit'])){
 
     if(!empty($_FILES['update_student_img']['name'])){
         $new_name = upload_student_pic($_FILES['update_student_img'],$path);
+        if(!empty($students_list['student_img'])){
+            unlink($path.'/'.$students_list['student_img']);
+        }
         $updatestudents['student_img'] = $new_name;   
     }
     updateQuery($updatestudents,'students',$updatecondition);
