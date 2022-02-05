@@ -31,6 +31,18 @@ if(!empty($_POST['action'])){
             where s.id = '".$_POST['student_id']."'");
             echo json_encode($sql);
         break;
+        case 'exams':
+            $sql = runloopQuery("select e.exam_name,ed.* from exam_details as ed inner join exams as e
+            on ed.exam_id = e.id where e.id = '".$_POST['e_id']."'");
+            echo json_encode($sql);
+        break;
+        case 'deleteExam' :
+            $deleteExam['id'] = $_POST['d_id'];
+            $deleteExamDetails['exam_id'] = $_POST['d_id'];
+            deleteQuery($deleteExam,'exams');
+            deleteQuery($deleteExamDetails,'exam_details');
+            echo "1";
+        break;
         default:
         echo json_encode([]);
         break; 
