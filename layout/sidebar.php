@@ -31,7 +31,13 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">Layouts</span></a>
+                        <a href="classes.php"><i class="fa fa-diamond"></i> <span class="nav-label">Classes</span></a>
+                    </li>
+                    <li>
+                        <a href="faculity.php"><i class="fa fa-diamond"></i> <span class="nav-label">Facculity</span></a>
+                    </li>
+                    <li>
+                        <a href="exams.php"><i class="fa fa-diamond"></i> <span class="nav-label">Exams</span></a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Graphs</span><span class="fa arrow"></span></a>

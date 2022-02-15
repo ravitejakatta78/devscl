@@ -388,8 +388,8 @@ on c.teacher_id = f.id where c.school_id = '".$school_id."'");
 			$("#addclassform").submit();
            	
 		}
-		
-	});
+	});	
+	
 
     $('#tblAddRow,#tblAddRowMore tbody tr').find('td').parent() 
     		.append('<td><a href="#" class="delrow"><i class="fa fa-trash border-red text-red"></i></a></td>');
