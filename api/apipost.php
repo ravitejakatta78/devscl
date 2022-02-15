@@ -139,8 +139,8 @@ if(!empty($headerslist['Authorization'])){
                                 $new_name = upload_student_pic($_FILES['student_img'],$path);
                                 $students['student_img'] = $new_name;   
                             }
-                            $students['created_by'] = $userdetails['user_name'];;
-                            $students['updated_by'] = $userdetails['user_name'];;
+                            $students['created_by'] = $userdetails['user_name'];
+                            $students['updated_by'] = $userdetails['user_name'];
                             $students['created_on'] = date('Y-m-d H:i:s');
                             $students['updated_on'] = date('Y-m-d H:i:s');
                             $students['reg_date'] = date('Y-m-d');
@@ -154,6 +154,43 @@ if(!empty($headerslist['Authorization'])){
                             }
                         }else{
                             $payload = ['status' => '0', 'message' => 'Error While Adding Parent Details'];
+                        }
+                    break;
+                    case 'addExam':
+                        if(!empty($_POST['exam_name']) && $_POST['exam_start_date'] && $_POST['exam_end_date']){
+                            $exams['exam_name'] = $_POST['exam_name'];
+                            $exams['exam_start_date'] = $_POST['exam_start_date'];
+                            $exams['exam_end_date'] = $_POST['exam_end_date'];
+                            $exams['class_id'] = $_POST['class_id'];
+                            $exams['school_id'] = $userdetails['school_id'];
+                            $exams['created_on'] = date('Y-m-d H:i:s');
+                            $exams['created_by'] = $userdetails['user_name'];
+                            $exams['updated_on'] = date('Y-m-d H:i:s');
+                            $exams['updated_by'] = $userdetails['user_name'];
+                            $exam_id = insertIDQuery($exams,'exams');
+                            
+                            if($exam_id) {
+                                if(!empty($_POST['subject_id'])){
+                                    for($e=0;$e<count($_POST['subject_id']);$e++){
+                                        $exam_details['exam_date'] = $_POST['exam_date'][$e];
+                                        $exam_details['subject_id'] = $_POST['subject_id'][$e];
+                                        $exam_details['exam_id'] = $exam_id;
+                                        $exam_details['created_on'] = date('Y-m-d H:i:s');
+                                        $exam_details['created_by'] = $userdetails['user_name'];
+                                        $exam_details['updated_on'] = date('Y-m-d H:i:s');
+                                        $exam_details['updated_by'] = $userdetails['user_name']; 
+                                        insertQuery($exam_details,'exam_details');
+                                    }  
+                                }
+                                $payload = ['status' => '1', 'message' => 'Exam Added Successfully'];
+                            }
+                            else{
+                                $payload = ['status' => '0', 'message' => 'Error While Adding Exam'];
+                            }
+                            
+                         }
+                        else{
+                            $payload = ['status' => '0', 'message' => 'Please Provide All Manadotory Fields'];
                         }
                     break;    
                       default:

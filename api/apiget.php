@@ -96,6 +96,27 @@ if(!empty($usersid)){
                             $subjectList = [];
                             $subjectList = runloopQuery("select * from subjects where school_id = '".$userdetails['school_id']."'");
                             $payload = array('status'=>'200','subjectList' => $subjectList,'message'=>'Subject Details');
+                        break;
+                        case 'examList':
+                            $examList = [];
+                            $examList = "select e.id exam_id, c.class_name, e.class_id, e.exam_name, e.exam_start_date
+                            , e.exam_end_date from exams e inner join classes c on e.class_id = c.id 
+                            where e.school_id = '".$userdetails['school_id']."' "; 
+                            if(!empty($_GET['class_id'])){
+                                $examList .= " and e.class_id = '".$_GET['class_id']."' ";    
+                            }
+                            $examList .= " order by e.id desc";
+                            $examList = runloopQuery($examList);
+                            $payload = array('status'=>'200','examList' => $examList,'message'=>'Exam List');
+                        break;
+                        case 'examScheduleList':
+                            $examScheduleList = [];
+                            $examScheduleList = runloopQuery("select ed.exam_date,subject_name from exam_details ed inner join subjects s on ed.subject_id = s.id 
+                            where ed.exam_id = '".$_GET['exam_id']."'"); 
+                            
+                            $payload = array('status'=>'200', 'examScheduleList' => $examScheduleList
+                            , 'exam_name' => $_GET['exam_name'], 'class_name' => $_GET['class_name']
+                            , 'message'=>'Exam List');
                         break;    
                         default:
                             $payload = array('status'=>'400','message'=>'Please specify a valid action');
