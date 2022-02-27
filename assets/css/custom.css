@@ -12,3 +12,6 @@
 .dataTables_info {
   display:none;
 }
+
+td.icons a{border:1px solid #796aee;color:#796aee;border-radius:4px;padding:4px 5px;margin-bottom: 5px;width: 25px;height: 25px;text-align: center;}
+td.icons a:hover{background:#796aee;color:#fff !important;cursor:pointer;}

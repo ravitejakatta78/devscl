@@ -77,7 +77,6 @@ on e.class_id = c.id where e.school_id = '".$school_id."'");
 
         <title>INSPINIA | Dashboard</title>
         <?php require_once('../layout/headerscripts.php'); ?>
-
 </head>
 
 <body>
@@ -110,9 +109,7 @@ on e.class_id = c.id where e.school_id = '".$school_id."'");
                                                 <th scope="col" class="sort" data-sort="name">Exam Name</th>
                                                 <th scope="col" class="sort" data-sort="budget">Starting Date</th>
                                                 <th scope="col" class="sort" data-sort="status">Ending Date</th>
-                                                <th scope="col" class="sort" data-sort="status">Add Exam</th>
-                                                <th scope="col" class="sort" data-sort="status">Exams Details</th>
-                                                <th scope="col" class="sort" data-sort="status">Delete</th>
+                                                <th >Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -123,12 +120,17 @@ on e.class_id = c.id where e.school_id = '".$school_id."'");
                                                     <td><?php echo $exam_table[$i]['exam_name']; ?></td>
                                                     <td><?php echo $exam_table[$i]['exam_start_date']; ?></td>
                                                     <td><?php echo $exam_table[$i]['exam_end_date']; ?></td>
-                                                    <td><button onclick="add_subject('<?php echo $exam_table[$i]['id']; ?>')" type="button" class="btn btn-sm btn-white">
-                                                    <i class="fa fa-plus"></button></td>
-                                                    <td><button onclick="display_exams('<?php echo $exam_table[$i]['id']; ?>')" type="button" class="btn btn-sm btn-white">
-                                                    <i class="fa fa-eye"></button></td>
-                                                    <td><button onclick="delete_exams('<?php echo $exam_table[$i]['id']; ?>')" type="button" class="btn btn-sm btn-white">
-                                                    <i class="fa fa-trash"></button></td>
+
+                                                    <td class="icons">
+                                                        <a title="Add Exams" onclick="addSubject('<?php echo $exam_table[$i]['id']; ?>')"  class="btn btn-sm btn-white">
+                                                            <i class="fa fa-plus"></i></a>
+                                                        <a title="View Exams" onclick="displayExams('<?php echo $exam_table[$i]['id']; ?>')"  class="btn btn-sm btn-white">
+                                                            <i class="fa fa-eye"></i></a>
+                                                        <a title="Delete Exams" onclick="deleteExams('<?php echo $exam_table[$i]['id']; ?>')"  class="btn btn-sm btn-white">
+                                                            <i class="fa fa-trash"></i></a>
+                                                        <a title="Add Marks" onclick="showExamStudents('<?php echo $exam_table[$i]['id']; ?>')"  class="btn btn-sm btn-white">
+                                                            <i class="fa fa-check"></i></a>
+                                                    </td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -316,12 +318,12 @@ on e.class_id = c.id where e.school_id = '".$school_id."'");
   </div>
 </div>
 <script>
+
     $("#addexamsubmitid").click(function(){
 		var user_input_value;
 		var err_value = 0
 		$('#examform').find('input,select,select2').each(function(){
             if($(this).prop('required')){
-                
 				user_input_value  = $("#"+this.id).val();
 				if(user_input_value == ''){
 					if(err_value == 0){
@@ -341,88 +343,115 @@ on e.class_id = c.id where e.school_id = '".$school_id."'");
 			$("#examform").submit();
            	
 		}
-		
 	});
-    $('#tblAddRow,#tblAddRowMore tbody tr').find('td').parent() 
+
+    $('#tblAddRow,#tblAddRowMore tbody tr').find('td').parent()
     		.append('<td><a href="#" class="delrow"><i class="fa fa-trash border-red text-red"></i></a></td>');
 
 
-		// Add row the table
-		$('#btnAddRow,#btnAddRowMore').on('click', function() {
-		    var lastRow = $('#tblAddRow tbody tr:last').html();
-		    //alert(lastRow);
-		    $('#tblAddRow,#tblAddRowMore tbody').append('<tr>' + lastRow + '</tr>');
-		    $('#tblAddRow,#tblAddRowMore tbody tr:last input').val('');
-		});
+    // Add row the table
+    $('#btnAddRow,#btnAddRowMore').on('click', function() {
+        var lastRow = $('#tblAddRow tbody tr:last').html();
+        //alert(lastRow);
+        $('#tblAddRow,#tblAddRowMore tbody').append('<tr>' + lastRow + '</tr>');
+        $('#tblAddRow,#tblAddRowMore tbody tr:last input').val('');
+    });
 
-        // Delete row on click in the table
-		$('#tblAddRow').on('click', 'tr a', function(e) {
-		    var lenRow = $('#tblAddRow tbody tr').length;
-		    e.preventDefault();
-		    if (lenRow == 1 || lenRow <= 1) {
-		        alert("Can't remove all row!");
-		    } else {
-		        $(this).parents('tr').remove();
-		    }
-		});
-
-        $('#tblAddRowMore').on('click', 'tr a', function(e) {
-		    var lenRow = $('#tblAddRowMore tbody tr').length;
-		    e.preventDefault();
-		    if (lenRow == 1 || lenRow <= 1) {
-		        alert("Can't remove all row!");
-		    } else {
-		        $(this).parents('tr').remove();
-		    }
-		});
-
-        function add_subject(exm_id) {
-            //alert(exm_id);
-            $("#addexamModal").modal('show');
-            $("#add_exam").val(exm_id);
+    // Delete row on click in the table
+    $('#tblAddRow').on('click', 'tr a', function(e) {
+        var lenRow = $('#tblAddRow tbody tr').length;
+        e.preventDefault();
+        if (lenRow == 1 || lenRow <= 1) {
+            alert("Can't remove all row!");
+        } else {
+            $(this).parents('tr').remove();
         }
-        $("#add_examsubmitid").click(function(){
-            $("#addexamform").submit();
-        });
+    });
 
-        function display_exams(e_id) {
-            var subjects_list_json = '<?php echo json_encode($subjects_list); ?>';
-            var subjects_list = JSON.parse(subjects_list_json);
-            var action = "exams";
+    $('#tblAddRowMore').on('click', 'tr a', function(e) {
+        var lenRow = $('#tblAddRowMore tbody tr').length;
+        e.preventDefault();
+        if (lenRow == 1 || lenRow <= 1) {
+            alert("Can't remove all row!");
+        } else {
+            $(this).parents('tr').remove();
+        }
+    });
+
+    function addSubject(exm_id)
+    {
+        $("#addexamModal").modal('show');
+        $("#add_exam").val(exm_id);
+    }
+
+    $("#add_examsubmitid").click(function(){
+        $("#addexamform").submit();
+    });
+
+    function displayExams(e_id)
+    {
+        var subjects_list_json = '<?php echo json_encode($subjects_list); ?>';
+        var subjects_list = JSON.parse(subjects_list_json);
+        var action = "exams";
+        var request = $.ajax({
+            url : "../ajax/commonajax.php",
+            type : "POST",
+            data : {e_id:e_id,action:action},
+        }).done(function(msg){
+            //alert(msg);
+            var exams_list = JSON.parse(msg);
+            $("#examsTable").html('');
+            for(var i=0;i<exams_list.length;i++) {
+                $("#examsTable").append("<tr>\
+                <td>"+exams_list[i]['exam_name']+"</td>\
+                <td>"+exams_list[i]['exam_date']+"</td>\
+                <td>"+subjects_list[exams_list[i]['subject_id']]+"</td>\
+                </tr>");
+            }
+        })
+        $("#displayModal").modal('show');
+    }
+
+    function deleteExams(d_id)
+    {
+        var text = "Are You Sure To Delete";
+        if (confirm(text) == true) {
+            var action = "deleteExam";
             var request = $.ajax({
                 url : "../ajax/commonajax.php",
                 type : "POST",
-                data : {e_id:e_id,action:action},
+                data : {d_id:d_id,action:action},
             }).done(function(msg){
-                //alert(msg);
-                var exams_list = JSON.parse(msg);
-                $("#examsTable").html('');
-                for(var i=0;i<exams_list.length;i++) {
-                    $("#examsTable").append("<tr>\
-                    <td>"+exams_list[i]['exam_name']+"</td>\
-                    <td>"+exams_list[i]['exam_date']+"</td>\
-                    <td>"+subjects_list[exams_list[i]['subject_id']]+"</td>\
-                    </tr>");
-                } 
+                location.reload();
             })
-            $("#displayModal").modal('show');
         }
+        else {
+            text = "You canceled!";
+        }
+    }
 
-        function delete_exams(d_id) {
-            var text = "Are You Sure To Delete";
-            if (confirm(text) == true) {
-                var action = "deleteExam";
-                var request = $.ajax({
-                    url : "../ajax/commonajax.php",
-                    type : "POST",
-                    data : {d_id:d_id,action:action},
-                }).done(function(msg){
-                    location.reload();
-                }) 
-            } else {
-                text = "You canceled!";
-            }
-        }
+    function showExamStudents(examId)
+    {
+        var form=document.createElement('form');
+        form.setAttribute('method','post');
+        form.setAttribute('action','show-exam-students.php');
+
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("name", "examId");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("value", examId);
+        form.appendChild(hiddenField);
+
+        /* var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("name", "tableName");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("value", name);
+        form.appendChild(hiddenField); */
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
 </script>
 </body>
 </html>

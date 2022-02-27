@@ -52,7 +52,7 @@ if(!empty($_POST['updatesubjectsub'])) {
 }
 
 $subject_list = runloopQuery("select * from subjects where school_id = '".$school_id."'");
-//echo "<pre>";print_r($subject_list);exit;
+
 
 ?>
 <head>
