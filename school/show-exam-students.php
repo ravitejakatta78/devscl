@@ -19,7 +19,8 @@ $user_name = user_details($userid,'user_name');
 $exam_details = runQuery("select * from exams where id = '".$_POST['examId']."'");
 //echo "<pre>";print_r($exam_details);exit;
 $students = runloopQuery("select * from students where student_class = '".$exam_details['class_id']."'");
-//echo "<pre>";print_r($students);exit;
+
+echo "<pre>";print_r($students);exit;
 
 
 
