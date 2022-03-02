@@ -16,9 +16,18 @@ $result = [];
 
 $school_id = user_details($userid,'school_id');
 $user_name = user_details($userid,'user_name');
+//echo $_POST['studentId'];exit;
+$student = runQuery("select * from students where id = '".$_POST['studentId']."'");
+//echo "<pre>";print_r($student);exit;
+$exam = runQuery("select * from exams where id = '".$_POST['examId']."'");
+//echo "<pre>";print_r($exam);exit;
 
+if(!empty($_POST['subject_marks'])){
+    print_r($_POST['subject_marks']);exit; 
+}
 
-
+$subjects = runloopQuery("select * from subjects where school_id = '".$school_id."'");
+//echo "<pre>";print_r($subjects);exit;
 
 
 ?>
@@ -57,7 +66,8 @@ $user_name = user_details($userid,'user_name');
                                 <div class="table-responsive">
                                     <div class="card">
                                         <div class="card-header">
-                                            Ravi - Unit One
+                                            <?php echo $student['first_name'];?> <?php echo $student['last_name'];?> -
+                                            <?php echo $exam['exam_name'];?>
                                         </div>
                                         <div class="card-body">
                                             <form>
@@ -65,20 +75,20 @@ $user_name = user_details($userid,'user_name');
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><h3>Subject Name</h3></label>
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><h3>Marks</h3></label>
                                                 </div>
+                                                <?php for($i=0;$i<count($subjects);$i++) { ?>
                                                 <div class="form-group row">
-                                                    <label for="staticEmail" class="col-sm-2 col-form-label">Telugu</label>
+                                                    <label for="staticEmail" class="col-sm-2 col-form-label"><?php echo $subjects[$i]['subject_name']; ?></label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control" id="inputPassword" placeholder="Marks">
+                                                        <input type="text" class="form-control" id="inputPassword" placeholder="Marks" name="subject_marks[]">
+                                                        <input type="hidden" class="form-control" name="subject_id[]" id="subject_id">
                                                     </div>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <label for="inputPassword" class="col-sm-2 col-form-label">Hindi</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control"  placeholder="Marks">
-                                                    </div>
-                                                </div>
+                                                <?php } ?>
+                                                <input type="hidden" name="studentId" value="<?php echo $_POST['studentId']; ?>">
+                                                <input type="hidden" name="examId" value="<?php echo $_POST['examId']; ?>">
+                                                <input type="submit" value="Save Marks" class="btn btn-primary">
                                             </form>
-                                            <a href="#" class="btn btn-primary">Save Marks</a>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -95,6 +105,11 @@ $user_name = user_details($userid,'user_name');
     </div>
     <!-- wrapper -->
     <?php require_once('../layout/footerscripts.php'); ?>
+    <script>
+         function submitmarks(){
+             $("#marks").submit();
+         }
+    </script>
 
 </body>
 </html>

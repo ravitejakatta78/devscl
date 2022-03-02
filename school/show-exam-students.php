@@ -16,7 +16,10 @@ $result = [];
 
 $school_id = user_details($userid,'school_id');
 $user_name = user_details($userid,'user_name');
-
+$exam_details = runQuery("select * from exams where id = '".$_POST['examId']."'");
+//echo "<pre>";print_r($exam_details);exit;
+$students = runloopQuery("select * from students where student_class = '".$exam_details['class_id']."'");
+//echo "<pre>";print_r($students);exit;
 
 
 
@@ -53,7 +56,7 @@ $user_name = user_details($userid,'user_name');
                                         <?= $result['message']; ?>. 
                                     </div>        
                                 <?php  } ?>
-                                <h3 class="pb-3">Unit One Exam</h3>
+                                <h3 class="pb-3"><?php echo $exam_details['exam_name']; ?></h3>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered table-hover dataTables-example" >
                                         <thead>
@@ -65,7 +68,17 @@ $user_name = user_details($userid,'user_name');
                                             </tr>
                                         </thead>
                                         <tbody>
-
+                                            <?php for($i=0;$i<count($students);$i++) { ?>
+                                                <tr>
+                                                    <td><?php echo $i+1; ?></td>
+                                                    <td><?php echo $students[$i]['first_name']; ?> <?php echo $students[$i]['last_name']; ?>
+                                                    </td>
+                                                    <td></td>
+                                                    <td><button onclick="updateMarks('<?php echo $students[$i]['id']; ?>',
+                                                    '<?php echo $exam_details['id']; ?>')">
+                                                    </button></td>
+                                                </tr>
+                                            <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -82,6 +95,31 @@ $user_name = user_details($userid,'user_name');
     </div>
     <!-- wrapper -->
     <?php require_once('../layout/footerscripts.php'); ?>
+
+    <script>
+        function updateMarks(studentId,examId)
+        {
+            //alert(examId);
+        var form=document.createElement('form');
+        form.setAttribute('method','post');
+        form.setAttribute('action','save-exam-marks.php');
+
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("name", "studentId");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("value", studentId);
+        form.appendChild(hiddenField);
+
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("name", "examId");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("value", examId);
+        form.appendChild(hiddenField);
+
+        document.body.appendChild(form);
+        form.submit();
+        }
+    </script>
 
 </body>
 </html>
