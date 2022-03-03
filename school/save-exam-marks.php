@@ -23,12 +23,37 @@ $exam = runQuery("select * from exams where id = '".$_POST['examId']."'");
 //echo "<pre>";print_r($exam);exit;
 
 if(!empty($_POST['subject_marks'])){
-    print_r($_POST['subject_marks']);exit; 
+    $marks_summary['exam_id'] = $_POST['examId'];
+    $marks_summary['student_id'] = $_POST['studentId'];
+    $marks_summary['exam_status'] = 1; 
+    $marks_summary['total_marks'] = array_sum($_POST['subject_marks']);
+    $marks_summary['reg_date'] = date('Y-m-d H:i:s');
+    $marks_summary['created_by'] = $userid;
+    $marks_summary['updated_on'] = date('Y-m-d H:i:s');
+    $marks_summary['updated_by'] = $userid;
+
+    $summary_id = insertIDQuery($marks_summary,'student_marks_summary');
+
+    if(!empty($summary_id)){
+        for($m=0;$m<count($_POST['subject_id']);$m++){
+            $marks['summary_marks_id'] = $summary_id;
+            $marks['subject_id'] = $_POST['subject_id'][$m];
+            $marks['marks'] = $_POST['subject_marks'][$m];
+            $marks['reg_date'] = date('Y-m-d H:i:s');
+            $marks['created_by'] = $userid;
+            $marks['updated_on'] = $userid;
+            $marks['updated_by'] = date('Y-m-d H:i:s');
+
+            $marks = insertQuery($marks,'student_marks_details');
+        }
+    }
+    header('location: exams.php');
 }
 
 $subjects = runloopQuery("select * from subjects where school_id = '".$school_id."'");
 //echo "<pre>";print_r($subjects);exit;
-
+$summary = runQuery("select * from student_marks_summary where exam_id = '".$_POST['examId']."' and
+student_id = '".$_POST['studentId']."'");
 
 ?>
 <head>
@@ -70,7 +95,7 @@ $subjects = runloopQuery("select * from subjects where school_id = '".$school_id
                                             <?php echo $exam['exam_name'];?>
                                         </div>
                                         <div class="card-body">
-                                            <form>
+                                            <form method="post">
                                                 <div class="form-group row">
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><h3>Subject Name</h3></label>
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><h3>Marks</h3></label>
@@ -80,7 +105,7 @@ $subjects = runloopQuery("select * from subjects where school_id = '".$school_id
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><?php echo $subjects[$i]['subject_name']; ?></label>
                                                     <div class="col-sm-6">
                                                         <input type="text" class="form-control" id="inputPassword" placeholder="Marks" name="subject_marks[]">
-                                                        <input type="hidden" class="form-control" name="subject_id[]" id="subject_id">
+                                                        <input type="hidden" class="form-control" name="subject_id[]" id="subject_id" value="<?php echo $subjects[$i]['id']; ?>">
                                                     </div>
                                                 </div>
                                                 <?php } ?>

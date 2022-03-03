@@ -20,7 +20,7 @@ $exam_details = runQuery("select * from exams where id = '".$_POST['examId']."'"
 //echo "<pre>";print_r($exam_details);exit;
 $students = runloopQuery("select * from students where student_class = '".$exam_details['class_id']."'");
 
-echo "<pre>";print_r($students);exit;
+//echo "<pre>";print_r($students);exit;
 
 
 
@@ -76,7 +76,7 @@ echo "<pre>";print_r($students);exit;
                                                     </td>
                                                     <td></td>
                                                     <td><button onclick="updateMarks('<?php echo $students[$i]['id']; ?>',
-                                                    '<?php echo $exam_details['id']; ?>')">
+                                                    '<?php echo $exam_details['id']; ?>')">Update Marks
                                                     </button></td>
                                                 </tr>
                                             <?php } ?>
