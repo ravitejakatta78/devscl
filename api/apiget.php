@@ -105,6 +105,9 @@ if(!empty($usersid)){
                             if(!empty($_GET['class_id'])){
                                 $examList .= " and e.class_id = '".$_GET['class_id']."' ";    
                             }
+                            if(!empty($_GET['id'])){
+                                $examList .= " and e.id = '".$_GET['id']."'";
+                            }
                             $examList .= " order by e.id desc";
                             $examList = runloopQuery($examList);
                             $payload = array('status'=>'200','examList' => $examList,'message'=>'Exam List');

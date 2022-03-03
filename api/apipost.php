@@ -192,7 +192,19 @@ if(!empty($headerslist['Authorization'])){
                         else{
                             $payload = ['status' => '0', 'message' => 'Please Provide All Manadotory Fields'];
                         }
-                    break;    
+                    break;
+                    case 'deleteExam':
+                        if(!empty($_POST['examId'])){
+                            deleteQuery(['id' => $_POST['examId']],'exams');
+                            deleteQuery(['exam_id' => $_POST['examId']],'exam_details');
+
+                            $payload = ['status' => '1', 'message' => 'Exam Deleted Successfully'];
+                        }
+                        else{
+                            $payload = ['status' => '0', 'message' => 'Error While Deleting Exam'];
+                        }
+
+                        break;
                       default:
                         $payload = array('status'=>'0','message'=>'Please specify a valid action');
                        break;
