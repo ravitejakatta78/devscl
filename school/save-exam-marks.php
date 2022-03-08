@@ -21,6 +21,10 @@ $student = runQuery("select * from students where id = '".$_POST['studentId']."'
 //echo "<pre>";print_r($student);exit;
 $exam = runQuery("select * from exams where id = '".$_POST['examId']."'");
 //echo "<pre>";print_r($exam);exit;
+$summary = runQuery("select * from student_marks_summary where exam_id = '".$_POST['examId']."' and
+student_id = '".$_POST['studentId']."'");
+//echo "<pre>";print_r($summary);exit;
+$examMarksCondition = (!empty($summary)) ? 1 : 2;
 
 if(!empty($_POST['subject_marks'])){
     if($_POST['examMarksCondition'] == 2) {
@@ -49,17 +53,29 @@ if(!empty($_POST['subject_marks'])){
         }
     }
     }
-    else{
-        $update_marks_summary['exam_id'] = $_POST['examId'];
-        $update_marks_summary['student_id'] = $_POST['studentId'];
-        $update_marks_summary['exam_status'] = 1; 
+    else{ 
         $update_marks_summary['total_marks'] = array_sum($_POST['subject_marks']);
-        $update_marks_summary['reg_date'] = date('Y-m-d H:i:s');
-        $update_marks_summary['created_by'] = $userid;
         $update_marks_summary['updated_on'] = date('Y-m-d H:i:s');
         $update_marks_summary['updated_by'] = $userid;
-        $updatecondition['id'] = $_POST['subject_marks'];
+        $updatecondition['id'] = $summary['id'];
         updateQuery($update_marks_summary,'student_marks_summary',$updatecondition);
+
+        $deleteMarks['summary_marks_id'] = $summary['id'];
+        deleteQuery($deleteMarks,'student_marks_details');
+
+        if(!empty($summary['id'])){
+            for($s=0;$s<count($_POST['subject_id']);$s++){
+                $marks['summary_marks_id'] = $summary['id'];
+                $marks['subject_id'] = $_POST['subject_id'][$s];
+                $marks['marks'] = $_POST['subject_marks'][$s];
+                $marks['reg_date'] = date('Y-m-d H:i:s');
+                $marks['created_by'] = $userid;
+                $marks['updated_on'] = $userid;
+                $marks['updated_by'] = date('Y-m-d H:i:s');
+                
+                insertQuery($marks,'student_marks_details');  
+            }
+        }
     }
     
     header('location: exams.php');
@@ -68,10 +84,7 @@ if(!empty($_POST['subject_marks'])){
 $subjects = runloopQuery("select ed.*,s.id,s.subject_name from exam_details as ed inner join subjects as s
 on ed.subject_id = s.id where ed.exam_id = '".$exam['id']."'");
 //echo "<pre>";print_r($subjects);exit;
-$summary = runQuery("select * from student_marks_summary where exam_id = '".$_POST['examId']."' and
-student_id = '".$_POST['studentId']."'");
-//echo "<pre>";print_r($summary);exit;
-$examMarksCondition = (!empty($summary)) ? 1 : 2;
+
 ?>
 <head>
 
@@ -119,8 +132,8 @@ $examMarksCondition = (!empty($summary)) ? 1 : 2;
                                                 </div>
                                                 <?php for($i=0;$i<count($subjects);$i++) { 
                                                     if($examMarksCondition == 1) {
-                                                        $marksList = runQuery("select * from student_marks_details where summary_marks_id and
-                                                        subject_id = '".$summary['id']."' and '".$subjects[$i]['id']."'");
+                                                        $marksList = runQuery("select * from student_marks_details where summary_marks_id = '".$summary['id']."' and
+                                                        subject_id = '".$subjects[$i]['id']."'");
                                                         $marks_list = $marksList['marks'];
                                                     }
                                                     else{
@@ -137,7 +150,7 @@ $examMarksCondition = (!empty($summary)) ? 1 : 2;
                                                 <?php } ?>
                                                 <input type="hidden" name="studentId" value="<?php echo $_POST['studentId']; ?>">
                                                 <input type="hidden" name="examId" value="<?php echo $_POST['examId']; ?>">
-                                                <input type="text" name="examMarksCondition" value="<?php echo $examMarksCondition; ?>">
+                                                <input type="hidden" name="examMarksCondition" value="<?php echo $examMarksCondition; ?>">
                                                 <input type="submit" value="Save Marks" class="btn btn-primary">
                                             </form>
                                             
