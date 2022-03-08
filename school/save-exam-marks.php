@@ -119,8 +119,8 @@ $examMarksCondition = (!empty($summary)) ? 1 : 2;
                                                 </div>
                                                 <?php for($i=0;$i<count($subjects);$i++) { 
                                                     if($examMarksCondition == 1) {
-                                                        $marksList = runQuery("select * from student_marks_details where summary_marks_id & 
-                                                        subject_id = '".$summary['id']."' & '".$subjects[$i]['id']."'");
+                                                        $marksList = runQuery("select * from student_marks_details where summary_marks_id and
+                                                        subject_id = '".$summary['id']."' and '".$subjects[$i]['id']."'");
                                                         $marks_list = $marksList['marks'];
                                                     }
                                                     else{
