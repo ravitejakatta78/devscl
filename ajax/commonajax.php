@@ -43,6 +43,12 @@ if(!empty($_POST['action'])){
             deleteQuery($deleteExamDetails,'exam_details');
             echo "1";
         break;
+        case 'marks' :
+            $sql = runloopQuery("select sms.*,smd.marks,s.subject_name from student_marks_summary as sms inner join
+            student_marks_details as smd on sms.id = smd.summary_marks_id inner join subjects as s on s.id = smd.subject_id
+            where sms.student_id = '".$_POST['student_id']."' and sms.exam_id = '".$_POST['exam_id']."'");
+            echo json_encode($sql);
+        break;
         default:
         echo json_encode([]);
         break; 

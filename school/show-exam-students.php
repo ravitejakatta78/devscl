@@ -69,12 +69,21 @@ $students = runloopQuery("select * from students where student_class = '".$exam_
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php for($i=0;$i<count($students);$i++) { ?>
+                                            <?php for($i=0;$i<count($students);$i++) { 
+                                                $studentDetails = runQuery("select * from student_marks_summary where
+                                                exam_id = '".$exam_details['id']."' and student_id = '".$students[$i]['id']."'");
+                                                ?>
                                                 <tr>
                                                     <td><?php echo $i+1; ?></td>
                                                     <td><?php echo $students[$i]['first_name']; ?> <?php echo $students[$i]['last_name']; ?>
                                                     </td>
-                                                    <td></td>
+                                                    <td><?php if(!empty($studentDetails)) { ?>
+                                                    <button onclick="showMarks('<?php echo $students[$i]['id']; ?>','<?php echo $exam_details['id']; ?>')">
+                                                    Marks</button><?php } 
+                                                    else {
+                                                        echo "Marks are not updated";
+                                                    }?>
+                                                    </td>
                                                     <td><button onclick="updateMarks('<?php echo $students[$i]['id']; ?>',
                                                     '<?php echo $exam_details['id']; ?>')">Update Marks
                                                     </button></td>
@@ -96,6 +105,33 @@ $students = runloopQuery("select * from students where student_class = '".$exam_
     </div>
     <!-- wrapper -->
     <?php require_once('../layout/footerscripts.php'); ?>
+    <div class="modal fade" id="displayModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Display Marks</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <table  class="table table-bordered table-striped mt-2">
+                        <thead>
+                            <tr>
+                                <th>Subject Name</th>
+                                <th>Marks</th>
+                            </tr>
+                        </thead>
+                        <tbody id="marksTable">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function updateMarks(studentId,examId)
@@ -119,6 +155,27 @@ $students = runloopQuery("select * from students where student_class = '".$exam_
 
         document.body.appendChild(form);
         form.submit();
+        }
+
+        function showMarks(student_id,exam_id){
+            //alert(exam_id);
+            var action = "marks";
+            var request = $.ajax({
+                url : "../ajax/commonajax.php",
+                type : "POST",
+                data : {student_id:student_id,exam_id:exam_id,action:action},
+            }).done(function(msg){
+                //alert(msg);
+                var marks_array = JSON.parse(msg);
+                $("#marksTable").html('');
+                for(var i=0;i<marks_array.length;i++){
+                    $("#marksTable").append("<tr>\
+                    <td>"+marks_array[i]['subject_name']+"</td>\
+                    <td>"+marks_array[i]['marks']+"</td>\
+                    </tr>");  
+                }
+            })
+            $("#displayModal").modal('show');
         }
     </script>
 
