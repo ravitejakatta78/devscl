@@ -25,7 +25,7 @@ on c.id = s.student_class where c.id = '".$classId['id']."'");
 if(!empty($_POST['attendance'])){
     $pastAttendanceData = runQuery("select count(*) as attendanceCount from attendance where class_id = '".$_POST['classId']."'
         and attendance_date = '".$_POST['attendance_date']."'");
-        //echo "<pre>";print_r($pastAttendanceData);exit;
+
         if(!empty($pastAttendanceData)){
             $deleteAttendance['class_id'] = $_POST['classId'];
             $deleteAttendance['attendance_date'] = $_POST['attendance_date'];
@@ -117,8 +117,8 @@ $sdate = !empty($_POST['sdate']) ? $_POST['sdate'] : date('Y-m-d');
                                         <tbody>
                                             <?php for($i=0;$i<count($students);$i++){?>
                                                 <tr>
-                                                    <td>  
-                                                    <input type="hidden" name="attendance[<?php echo $i; ?>]" value="1">    
+                                                    <td>
+                                                    <input type="hidden" name="attendance[<?php echo $i; ?>]" value="2">
                                                     <input type="checkbox" id="attendance" name="attendance[<?php echo $i; ?>]" value="1" checked></td>
                                                     <td><?php echo $students[$i]['first_name'];?>
                                                     <?php echo $students[$i]['last_name']; ?></td>
