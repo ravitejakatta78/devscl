@@ -48,6 +48,9 @@ $students = runloopQuery("select * from students where student_class = '".$exam_
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox ">
+                            <div class="ibox-title">
+                                <h3 ><?php echo $exam_details['exam_name']; ?></h3>
+                            </div>
                             <div class="ibox-content">
                                 <?php if(!empty($result)){
                                     $notification_class = ($result['status'] == '1')  ? 'success' : 'danger'; 
@@ -57,7 +60,6 @@ $students = runloopQuery("select * from students where student_class = '".$exam_
                                         <?= $result['message']; ?>. 
                                     </div>        
                                 <?php  } ?>
-                                <h3 class="pb-3"><?php echo $exam_details['exam_name']; ?></h3>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered table-hover dataTables-example" >
                                         <thead>

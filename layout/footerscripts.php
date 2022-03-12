@@ -42,6 +42,7 @@
     <script src="../assets/js/plugins/toastr/toastr.min.js"></script>
 
     <script src="../assets/js/custom.js"></script>
+    <script src="../assets/js/jquery.datetimepicker.full.min.js"></script>
 
 
 

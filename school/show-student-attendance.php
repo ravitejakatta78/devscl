@@ -11,7 +11,7 @@ if(empty($userid)){
 }
 $pagetitle = 'Attendance';
 $subtitle = 'Students Attendance List';
-$toggleaddbutton = 1;
+$toggleaddbutton = 0;
 $result = [];
 //$result = ['status' => '1', 'message' => 'Added Successfully'];
 
@@ -23,6 +23,8 @@ $students = runloopQuery("select c.*,s.first_name,s.last_name from classes as c 
 on c.id = s.student_class where c.id = '".$classId['id']."'");
 //echo "<pre>";print_r($students);exit;
 
+//date picker dates
+$sdate = !empty($_POST['sdate']) ? $_POST['sdate'] : date('Y-m-d');
 ?>
 <head>
 
@@ -46,7 +48,30 @@ on c.id = s.student_class where c.id = '".$classId['id']."'");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="ibox ">
-                            <div class="ibox-content">
+                            <div class="ibox-title pb-4">
+                                <h5>6th Class</h5>
+                                <div class="ibox-tools">
+                                    <form class="form-inline" method="POST" >
+                                        <div class="form-group">
+                                            <div class="input-group mb-3 mr-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                                <input type="date" class="form-control" id="sdate" name="sdate" placeholder="End Date" value="<?= $sdate ; ?>">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <input type="submit" class="btn btn-add btn-sm btn-search" value="Search">
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="ibox-content ">
                                 <?php if(!empty($result)){
                                     $notification_class = ($result['status'] == '1')  ? 'success' : 'danger'; 
                                     ?> 
@@ -57,21 +82,25 @@ on c.id = s.student_class where c.id = '".$classId['id']."'");
                                 <?php  } ?>
                             
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-bordered table-hover dataTables-example" >
+
+
+                                    <table class="table table-striped table-bordered table-hover" >
                                         <thead>
                                             <tr>
-                                                <th scope="col" class="sort" data-sort="name">ID</th>
+                                                <th scope="col" class="sort" data-sort="budget">
+                                                    <input type="checkbox" id="checkAll" name="checkAll" checked>
+                                                </th>
                                                 <th scope="col" class="sort" data-sort="name">Student Name</th>
-                                                <th scope="col" class="sort" data-sort="budget"></th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php for($i=0;$i<count($students);$i++){?>
                                                 <tr>
-                                                    <td><?php echo $i+1;?></td>
-                                                    <td><?php echo $students[$i]['first_name'];?> 
+                                                    <td>  <input type="checkbox" id="attendance" name="attendance" checked></td>
+                                                    <td><?php echo $students[$i]['first_name'];?>
                                                     <?php echo $students[$i]['last_name']; ?></td>
-                                                    <td><input type="checkbox" name="attendance" id="attendance"></td>
+
                                                 </tr>
                                             <?php } ?>
 
@@ -91,5 +120,10 @@ on c.id = s.student_class where c.id = '".$classId['id']."'");
     </div>
     <!-- wrapper -->
     <?php require_once('../layout/footerscripts.php'); ?>
+<script>
+    $("#checkAll").click(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+    </script>
 </body>
 </html>

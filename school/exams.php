@@ -209,10 +209,10 @@ on e.class_id = c.id where e.school_id = '".$school_id."'");
 						<tbody>
 							<tr>
 							    <td>
-								<input type="date" name="exam_date[]" id="exam_date" class="form-control">
+								<input type="datetime-local" name="exam_date[]" id="exam_date" class="form-control">
 								</td>
                                 <td>
-                                    <select name="subject_id[]" id="subject_id" class="form-control">
+                                    <select name="subject_id[]" id="subject_id" class="form-control ">
                                     <option value="">Select Subject</option>
                                     <?php for($s=0;$s<count($subjects);$s++) { ?>
                                         <option value="<?php echo $subjects[$s]['id']; ?>"><?php echo $subjects[$s]['subject_name']; ?></option>
@@ -260,7 +260,7 @@ on e.class_id = c.id where e.school_id = '".$school_id."'");
 						<tbody>
 							<tr>
 							    <td>
-								<input type="date" name="exam_date[]" id="exam_date" class="form-control">
+								<input type="datetime-local" name="exam_date[]" id="exam_date" class="form-control">
 								</td>
                                 <td>
                                     <select name="subject_id[]" id="subject_id" class="form-control">
@@ -451,6 +451,7 @@ on e.class_id = c.id where e.school_id = '".$school_id."'");
         document.body.appendChild(form);
         form.submit();
     }
+
 
 </script>
 </body>
