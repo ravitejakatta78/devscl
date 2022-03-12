@@ -43,6 +43,9 @@
                         <a href="attendance.php"><i class="fa fa-diamond"></i> <span class="nav-label">Attendance</span></a>
                     </li>
                     <li>
+                        <a href="students.php"><i class="fa fa-diamond"></i> <span class="nav-label">Students</span></a>
+                    </li>
+                    <li>
                         <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Graphs</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="graph_flot.html">Flot Charts</a></li>
