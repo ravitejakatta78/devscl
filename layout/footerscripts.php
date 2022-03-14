@@ -43,6 +43,7 @@
 
     <script src="../assets/js/custom.js"></script>
     <script src="../assets/js/jquery.datetimepicker.full.min.js"></script>
+   <script src="../assets/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 
 
 

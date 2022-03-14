@@ -11,3 +11,4 @@
     <link href="../assets/css/style.css" rel="stylesheet">
     <link href="../assets/css/custom.css" rel="stylesheet">
     <link href="../assets/css/jquery.datetimepicker.min.css" rel="stylesheet">
+    <link href="../assets/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
