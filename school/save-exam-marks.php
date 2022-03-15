@@ -133,16 +133,7 @@ where ed.exam_id = '".$exam['id']."'");
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><h3>Subject Name</h3></label>
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><h3>Marks</h3></label>
                                                 </div>
-                                                <?php for($i=0;$i<count($subjects);$i++) { 
-                                                    /*if($examMarksCondition == 1) {
-                                                        $marksList = runQuery("select * from student_marks_details where summary_marks_id = '".$summary['id']."' and
-                                                        subject_id = '".$subjects[$i]['id']."'");
-                                                        $marks_list = $marksList['marks'];
-                                                    }
-                                                    else{
-                                                        $marks_list = NULL;
-                                                    }*/
-                                                    ?>
+                                                <?php for($i=0;$i<count($subjects);$i++) { ?>
                                                 <div class="form-group row">
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><?php echo $subjects[$i]['subject_name']; ?></label>
                                                     <div class="col-sm-6">
