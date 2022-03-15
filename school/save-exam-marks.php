@@ -81,8 +81,11 @@ if(!empty($_POST['subject_marks'])){
     header('location: exams.php');
 }
 
-$subjects = runloopQuery("select ed.*,s.id,s.subject_name from exam_details as ed inner join subjects as s
-on ed.subject_id = s.id where ed.exam_id = '".$exam['id']."'");
+$subjects = runloopQuery("select ed.*,s.id,s.subject_name,smd.marks from exam_details as ed 
+inner join subjects as s on ed.subject_id = s.id
+left join student_marks_summary as sms on sms.exam_id = ed.exam_id and sms.student_id = '".$student['id']."'
+ left join student_marks_details as smd on smd.summary_marks_id = sms.id and smd.subject_id = s.id
+where ed.exam_id = '".$exam['id']."'");
 //echo "<pre>";print_r($subjects);exit;
 
 ?>
@@ -131,19 +134,19 @@ on ed.subject_id = s.id where ed.exam_id = '".$exam['id']."'");
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><h3>Marks</h3></label>
                                                 </div>
                                                 <?php for($i=0;$i<count($subjects);$i++) { 
-                                                    if($examMarksCondition == 1) {
+                                                    /*if($examMarksCondition == 1) {
                                                         $marksList = runQuery("select * from student_marks_details where summary_marks_id = '".$summary['id']."' and
                                                         subject_id = '".$subjects[$i]['id']."'");
                                                         $marks_list = $marksList['marks'];
                                                     }
                                                     else{
                                                         $marks_list = NULL;
-                                                    }
+                                                    }*/
                                                     ?>
                                                 <div class="form-group row">
                                                     <label for="staticEmail" class="col-sm-2 col-form-label"><?php echo $subjects[$i]['subject_name']; ?></label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control" id="inputPassword" placeholder="Marks" name="subject_marks[]" value = "<?php echo $marks_list; ?>">
+                                                        <input type="text" class="form-control" id="inputPassword" placeholder="Marks" name="subject_marks[]" value = "<?php echo $subjects[$i]['marks']; ?>">
                                                         <input type="hidden" class="form-control" name="subject_id[]" id="subject_id" value="<?php echo $subjects[$i]['id']; ?>">
                                                     </div>
                                                 </div>

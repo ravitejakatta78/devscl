@@ -17,10 +17,10 @@ $result = [];
 
 $school_id = user_details($userid,'school_id');
 $user_name = user_details($userid,'user_name');
-$classId = runQuery("select * from classes where id = '".$_POST['classId']."'");
-//echo "<pre>";print_r($classId);exit;
-$students = runloopQuery("select c.*,s.first_name,s.last_name,s.id from classes as c inner join students as s
-on c.id = s.student_class where c.id = '".$classId['id']."'");
+//date picker dates
+$sdate = !empty($_POST['sdate']) ? $_POST['sdate'] : date('Y-m-d');
+
+
 //echo "<pre>";print_r($students);exit;
 if(!empty($_POST['attendance'])){
     $pastAttendanceData = runQuery("select count(*) as attendanceCount from attendance where class_id = '".$_POST['classId']."'
@@ -42,8 +42,12 @@ if(!empty($_POST['attendance'])){
     }
 
 }
-//date picker dates
-$sdate = !empty($_POST['sdate']) ? $_POST['sdate'] : date('Y-m-d');
+$classId = runQuery("select * from classes where id = '".$_POST['classId']."'");
+//echo "<pre>";print_r($classId);exit;
+$students = runloopQuery("select c.*,s.first_name,s.last_name,s.id,a.attendance_status from classes as c 
+inner join students as s on c.id = s.student_class 
+left join attendance as a on a.student_id = s.id and a.attendance_date = '".$sdate."'
+where c.id = '".$classId['id']."'");
 ?>
 <head>
 
@@ -108,18 +112,19 @@ $sdate = !empty($_POST['sdate']) ? $_POST['sdate'] : date('Y-m-d');
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="sort" data-sort="budget">
-                                                    <input type="checkbox" id="checkAll" name="checkAll" checked>
+                                                    <input type="checkbox" id="checkAll" name="checkAll" >
                                                 </th>
                                                 <th scope="col" class="sort" data-sort="name">Student Name</th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php for($i=0;$i<count($students);$i++){?>
+                                            <?php for($i=0;$i<count($students);$i++){ ?>
                                                 <tr>
                                                     <td>
                                                     <input type="hidden" name="attendance[<?php echo $i; ?>]" value="2">
-                                                    <input type="checkbox" id="attendance" name="attendance[<?php echo $i; ?>]" value="1" checked></td>
+                                                    <input type="checkbox" id="attendance" name="attendance[<?php echo $i; ?>]" 
+                                                    value="1" <?php if( $students[$i]['attendance_status'] == 1) { ?> checked <?php } ?>></td>
                                                     <td><?php echo $students[$i]['first_name'];?>
                                                     <?php echo $students[$i]['last_name']; ?></td>
                                                     <input type="hidden" name="student_id[]" value="<?php echo $students[$i]['id']; ?>">
