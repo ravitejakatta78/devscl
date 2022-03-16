@@ -49,6 +49,15 @@ if(!empty($_POST['action'])){
             where sms.student_id = '".$_POST['student_id']."' and sms.exam_id = '".$_POST['exam_id']."'");
             echo json_encode($sql);
         break;
+        case 'fee':
+            $sql = runQuery("select * from school_fee where id = '".$_POST['feeId']."'");
+            echo json_encode($sql);
+        break;
+        case 'deleteFee' :
+            $deleteFee['id'] = $_POST['fee_id'];
+            deleteQuery($deleteFee,'school_fee');
+            echo "1";
+        break;
         default:
         echo json_encode([]);
         break; 

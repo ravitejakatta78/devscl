@@ -14,7 +14,7 @@ define('SCHOOL_NAME','INSPINIA');
 define('SCHOOL_TOKEN','$CH0O1');
 define('ROLES',['1' => 'Admin','2' => 'School Admin','3' => 'Faculity','4' => 'Student', '5' => 'Parent']) ;
 define('GENDER',['1' => 'Male', '2' => 'Female', '3' => 'Others']) ;
-define('C_TYPE',['1' => 'Monthly Fee', '2' => 'Term Fee', '3' => 'Van Fee', '4' => 'Books Fee']);
+define('FEE_TYPE',['1' => 'Monthly Fee', '2' => 'Term Fee', '3' => 'Van Fee', '4' => 'Books Fee']);
 
 const ACTIVE = 1;
 const INACTIVE = 2;

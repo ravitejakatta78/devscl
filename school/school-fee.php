@@ -29,6 +29,20 @@ if(!empty($_POST['addfee'])){
     $fee['updated_on'] = date('Y-m-d H:i:s');
     insertQuery($fee,'school_fee');
 }
+
+if(!empty($_POST['updatefee'])){
+    $updateFee['school_id'] = $school_id;
+    $updateFee['class_id'] = $_POST['update_class_id'];
+    $updateFee['fee_type'] = $_POST['update_fee_type'];
+    $updateFee['fee_amount'] = $_POST['update_fee_amount'];
+    $updateFee['fee_status'] = 1;
+    $updateFee['created_by'] = $user_name;
+    $updateFee['created_on'] = date('Y-m-d');
+    $updateFee['updated_by'] = $user_name;
+    $updateFee['updated_on'] = date('Y-m-d H:i:s');
+    $updateFeeCondition['id'] = $_POST['updatefee'];
+    updateQuery($updateFee,'school_fee',$updateFeeCondition);
+}
 $class = runloopQuery("select * from classes where school_id = '".$school_id."'");
 //echo "<pre>";print_r($class);exit;
 $schoolFee = runloopQuery("select sf.*,c.class_name from school_fee as sf inner join classes as c
@@ -76,6 +90,8 @@ on sf.class_id = c.id where sf.school_id = '".$school_id."'");
                                                 <th scope="col" class="sort" data-sort="name">Class Name</th>
                                                 <th scope="col" class="sort" data-sort="budget">Fee Type</th>
                                                 <th scope="col" class="sort" data-sort="status">Amount</th>
+                                                <th scope="col" class="sort" data-sort="status">Update Fee</th>
+                                                <th scope="col" class="sort" data-sort="status">Delete Fee</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -83,8 +99,12 @@ on sf.class_id = c.id where sf.school_id = '".$school_id."'");
                                                 <tr>
                                                     <td><?php echo $i+1; ?></td>
                                                     <td><?php echo $schoolFee[$i]['class_name']; ?></td>
-                                                    <td><?php echo C_TYPE[$schoolFee[$i]['fee_type']]; ?></td>
+                                                    <td><?php echo FEE_TYPE[$schoolFee[$i]['fee_type']]; ?></td>
                                                     <td><?php echo $schoolFee[$i]['fee_amount']; ?></td>
+                                                    <td><button onclick="update_fee('<?php echo $schoolFee[$i]['id']; ?>')" type="button" class="btn btn-sm btn-white">
+                                                    <i class="fa fa-plus"></button></td>
+                                                    <td><button onclick="delete_fee('<?php echo $schoolFee[$i]['id']; ?>')" type="button" class="btn btn-sm btn-white">
+                                                    <i class="fa fa-trash"></button></td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -145,10 +165,9 @@ on sf.class_id = c.id where sf.school_id = '".$school_id."'");
                     <div class="col-md-9">
                         <select id="fee_type" name="fee_type" class="form-control" required/>
                             <option value="">Select Fee Type</option>
-                            <option value="1">Monthly Fee</option>
-                            <option value="2">Term Fee</option>
-                            <option value="3">Van Fee</option>
-                            <option value="4">Books Fee</option>
+                            <?php foreach(FEE_TYPE as $key => $val) { ?>
+                                <option value="<?php echo $key; ?>"><?php echo $val;?></option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>
@@ -162,6 +181,65 @@ on sf.class_id = c.id where sf.school_id = '".$school_id."'");
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="addfeesubmitid">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div> <!--add fee over-->
+
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLabel">Update School Fee</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <div class="modal-body">
+        <form method="post" action="" id="updatefeeform" autocomplete="off">  
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label for="update_class_id" class="col-md-3">Class Name</label>
+                    <div class="col-md-9">
+                        <select id="update_class_id" name="update_class_id" class="form-control" required/>
+                            <option value="">Select Class</option>
+                            <?php for($c=0;$c<count($class);$c++) { ?>
+                                <option value="<?php echo $class[$c]['id']; ?>"><?php echo $class[$c]['class_name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="update_fee_amount" class="col-md-3">Fee Amount</label>
+                    <div class="col-md-9">
+                        <input type="text" id="update_fee_amount" name="update_fee_amount" class="form-control" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label for="update_fee_type" class="col-md-3">Fee Type</label>
+                    <div class="col-md-9">
+                        <select id="update_fee_type" name="update_fee_type" class="form-control" required/>
+                            <option value="">Select Fee Type</option>
+                            <?php foreach(FEE_TYPE as $key => $val) { ?>
+                                <option value="<?php echo $key; ?>"><?php echo $val;?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <input type="hidden" id="updatefee" name="updatefee" />
+            
+        </form> 
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="updatefeesubmitid">Save changes</button>
       </div>
     </div>
   </div>
@@ -194,6 +272,44 @@ on sf.class_id = c.id where sf.school_id = '".$school_id."'");
 		}
 		
 	});
+
+    function update_fee(feeId){
+        //alert(feeId);
+        var action = 'fee';
+        var request = $.ajax({
+            url : "../ajax/commonajax.php",
+            type : "POST",
+            data : {feeId:feeId,action:action},
+        }).done(function(msg) {
+            //alert(msg);
+            var fee_array = JSON.parse(msg);
+            $("#update_class_id").val(fee_array['class_id']);
+            $("#update_fee_amount").val(fee_array['fee_amount']);
+            $("#update_fee_type").val(fee_array['fee_type']);
+        })
+        $("#updateModal").modal('show');
+        $("#updatefee").val(feeId);
+    }
+    $("#updatefeesubmitid").click(function(){
+        $("#updatefeeform").submit();
+    });
+
+    function delete_fee(fee_id) {
+        var text = "Are You Sure To Delete";
+        if (confirm(text) == true) {
+            var action = "deleteFee";
+            var request = $.ajax({
+                url : "../ajax/commonajax.php",
+                type : "POST",
+                data : {fee_id:fee_id,action:action},
+            }).done(function(msg){
+                location.reload();
+            })
+        }
+        else {
+            text = "You canceled!";
+        }
+    }
 </script>
 </body>
 </html>
