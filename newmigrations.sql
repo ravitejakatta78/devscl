@@ -28,3 +28,6 @@ CREATE TABLE `student_marks_details` (
     `updated_by` DATETIME NULL DEFAULT NULL ,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
+
+-- 21-Mar-2022
+ALTER TABLE `student_paid_fee` ADD `fee_type` INT(3) NULL DEFAULT NULL AFTER `status`;

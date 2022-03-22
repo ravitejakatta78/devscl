@@ -58,6 +58,20 @@ if(!empty($_POST['action'])){
             deleteQuery($deleteFee,'school_fee');
             echo "1";
         break;
+        case 'payFee' :
+            $sql = runloopQuery("select * from students where student_class = '".$_POST['class_id']."'");
+            echo json_encode($sql);
+        break;
+        case 'feeType' :
+            $sql = runQuery("select * from school_fee where fee_type = '".$_POST['fee_type']."' and
+            class_id = '".$_POST['classId']."'");
+            echo json_encode($sql);
+        break;
+        case 'deletePaidFee' :
+            $deletePaidFee['id'] = $_POST['paidId'];
+            deleteQuery($deletePaidFee,'student_paid_fee');
+            echo "1";
+        break;
         default:
         echo json_encode([]);
         break; 
