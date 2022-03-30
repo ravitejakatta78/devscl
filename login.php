@@ -21,7 +21,7 @@ if(!empty($userid)){
 	if(($row['user_password']) == md5($mypassword) ){	
 	    $_SESSION['sessionusersid'] = $row['id']; 
         
-        header("Location: admin/addschool.php");
+        header("Location: school/student-dashboard.php");
 	} else {			
 	$message .= "Your Login password is invalid";	
 	}		
