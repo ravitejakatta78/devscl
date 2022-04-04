@@ -15,11 +15,11 @@ $toggleaddbutton = 1;
 $result = [];
 $school_id = user_details($userid,'school_id');
 $user_name = user_details($userid,'user_name');
-$students = runQuery("
-select s.first_name,s.last_name,s.address,p.parent_name,p.email,p.phone,spf.amount,spf.paid_date,spf.fee_type from 
-students as s inner join parents as p on s.parent_id = p.id 
-inner join student_paid_fee as spf on spf.student_id = s.id where s.id = '4'");
+$students = runQuery("select s.first_name,s.last_name,s.address,p.parent_name,p.email,p.phone from 
+students as s inner join parents as p on s.parent_id = p.id where s.id = '4'");
 //echo "<pre>";print_r($students);exit;
+$feeDetails = runloopQuery("select * from student_paid_fee where student_id = '4'");
+//echo "<pre>";print_r($feeDetails);exit;
 ?>
 <head>
 
@@ -56,26 +56,25 @@ inner join student_paid_fee as spf on spf.student_id = s.id where s.id = '4'");
                                             <div class="col-md-12">
                                                 <div class="widget lazur-bg p-lg">
                                                     <h2>
-                                                        Parent : <?php echo $students['parent_name'];?>
+                                                        Parent : <?php echo $students['parent_name']; ?>
                                                     </h2>
                                                     <ul class="list-unstyled m-t-md">
                                                         <li>
                                                             <span class="fa fa-envelope m-r-xs"></span>
                                                             <label>Email:</label>
-                                                            <?php echo $students['email']; ?>
+                                                            <?php echo $students['email']; ?> 
                                                         </li>
                                                         <li>
                                                             <span class="fa fa-home m-r-xs"></span>
                                                             <label>Address:</label>
-                                                            <?php echo $students['address']; ?>
+                                                            <?php echo $students['address']; ?>                                                            
                                                         </li>
                                                         <li>
                                                             <span class="fa fa-phone m-r-xs"></span>
                                                             <label>Contact:</label>
                                                             <?php echo $students['phone']; ?>
                                                         </li>
-                                                    </ul>
-
+                                                    </ul>    
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -219,30 +218,22 @@ inner join student_paid_fee as spf on spf.student_id = s.id where s.id = '4'");
                                                         <h5>Fee Details</h5>
                                                         <table class="table table-stripped small m-t-md">
                                                             <tbody>
-                                                            <tr>
-                                                                <td class="no-borders">
-                                                                    <i class="fa fa-circle text-danger"></i>
-                                                                </td>
-                                                                <td  class="no-borders">
-                                                                    <?php echo $students['amount']; ?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <i class="fa fa-circle text-danger"></i>
-                                                                </td>
-                                                                <td>
-                                                                <?php echo $students['paid_date']; ?>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <i class="fa fa-circle text-danger"></i>
-                                                                </td>
-                                                                <td>
-                                                                <?php echo FEE_TYPE[$students['fee_type']]; ?>
-                                                                </td>
-                                                            </tr>
+                                                                <?php for($i=0;$i<count($feeDetails);$i++) { ?>
+                                                                    <tr>
+                                                                        <td class="no-borders">
+                                                                        <i class="fa fa-circle text-danger"></i>
+                                                                        </td>
+                                                                        <td  class="no-borders">
+                                                                        <?php echo $feeDetails[$i]['amount']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                        <?php echo $feeDetails[$i]['paid_date']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                        <?php echo FEE_TYPE[$feeDetails[$i]['fee_type']]; ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php } ?>
                                                             </tbody>
                                                         </table>
                                                     </div>
