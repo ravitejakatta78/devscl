@@ -13,7 +13,13 @@ $pagetitle = 'Schools';
 $subtitle = 'Schools List';
 $toggleaddbutton = 1;
 $result = [];
-
+$school_id = user_details($userid,'school_id');
+$user_name = user_details($userid,'user_name');
+$students = runQuery("
+select s.first_name,s.last_name,s.address,p.parent_name,p.email,p.phone,spf.amount,spf.paid_date,spf.fee_type from 
+students as s inner join parents as p on s.parent_id = p.id 
+inner join student_paid_fee as spf on spf.student_id = s.id where s.id = '4'");
+//echo "<pre>";print_r($students);exit;
 ?>
 <head>
 
@@ -50,23 +56,23 @@ $result = [];
                                             <div class="col-md-12">
                                                 <div class="widget lazur-bg p-lg">
                                                     <h2>
-                                                        Parent : Janet Smith
+                                                        Parent : <?php echo $students['parent_name'];?>
                                                     </h2>
                                                     <ul class="list-unstyled m-t-md">
                                                         <li>
                                                             <span class="fa fa-envelope m-r-xs"></span>
                                                             <label>Email:</label>
-                                                            mike@mail.com
+                                                            <?php echo $students['email']; ?>
                                                         </li>
                                                         <li>
                                                             <span class="fa fa-home m-r-xs"></span>
                                                             <label>Address:</label>
-                                                            Street 200, Avenue 10
+                                                            <?php echo $students['address']; ?>
                                                         </li>
                                                         <li>
                                                             <span class="fa fa-phone m-r-xs"></span>
                                                             <label>Contact:</label>
-                                                            (+121) 678 3462
+                                                            <?php echo $students['phone']; ?>
                                                         </li>
                                                     </ul>
 
@@ -171,7 +177,7 @@ $result = [];
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="ibox-content text-center lazur-bg ">
-                                                    <h1>Nicki Smith</h1>
+                                                    <h1><?php echo $students['first_name']; ?> <?php echo $students['last_name']; ?></h1>
                                                     <div class="m-b-sm">
                                                         <img alt="image" class="rounded-circle" src="../assets/img/a8.jpg">
                                                     </div>
@@ -218,7 +224,7 @@ $result = [];
                                                                     <i class="fa fa-circle text-danger"></i>
                                                                 </td>
                                                                 <td  class="no-borders">
-                                                                    Example element 1
+                                                                    <?php echo $students['amount']; ?>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -226,7 +232,7 @@ $result = [];
                                                                     <i class="fa fa-circle text-danger"></i>
                                                                 </td>
                                                                 <td>
-                                                                    Example element 2
+                                                                <?php echo $students['paid_date']; ?>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -234,7 +240,7 @@ $result = [];
                                                                     <i class="fa fa-circle text-danger"></i>
                                                                 </td>
                                                                 <td>
-                                                                    Example element 3
+                                                                <?php echo FEE_TYPE[$students['fee_type']]; ?>
                                                                 </td>
                                                             </tr>
                                                             </tbody>
