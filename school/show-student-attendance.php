@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Attendance';
 $subtitle = 'Students Attendance List';
@@ -26,11 +24,11 @@ if(!empty($_POST['attendance'])){
     $pastAttendanceData = runQuery("select count(*) as attendanceCount from attendance where class_id = '".$_POST['classId']."'
         and attendance_date = '".$_POST['attendance_date']."'");
 
-        if(!empty($pastAttendanceData)){
-            $deleteAttendance['class_id'] = $_POST['classId'];
-            $deleteAttendance['attendance_date'] = $_POST['attendance_date'];
-            deleteQuery($deleteAttendance,'attendance');
-        }
+    if(!empty($pastAttendanceData)){
+        $deleteAttendance['class_id'] = $_POST['classId'];
+        $deleteAttendance['attendance_date'] = $_POST['attendance_date'];
+        deleteQuery($deleteAttendance,'attendance');
+    }
     for($a=0;$a<count($_POST['attendance']);$a++){
         $attendance['student_id'] = $_POST['student_id'][$a];
         $attendance['attendance_status'] = $_POST['attendance'][$a];
@@ -49,6 +47,9 @@ inner join students as s on c.id = s.student_class
 left join attendance as a on a.student_id = s.id and a.attendance_date = '".$sdate."'
 where c.id = '".$classId['id']."'");
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

@@ -1,42 +1,43 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
-error_reporting(E_ALL); 
+error_reporting(E_ALL);
 include('common.php');
-$userid = current_userid(); 
+$userid = current_userid();
 if(!empty($userid)){
-	//header("Location: loan.php");
-	}
-	$message = '';
-	if($_SERVER["REQUEST_METHOD"] == "POST") {	
-        
-	if(isset($_POST['adminlogin'])){	
-	if(!empty($_POST['username'])){	
-	if(!empty($_POST['password'])){		
-	$mymailid = mysqli_real_escape_string($conn,$_POST['username']);	
-	$mypassword = mysqli_real_escape_string($conn,$_POST['password']); 	
-	$row = runQuery("SELECT * FROM users WHERE user_name = '".$mymailid."'");	
- 	if(!empty($row['id'])){	
-	if(($row['user_password']) == md5($mypassword) ){	
-	    $_SESSION['sessionusersid'] = $row['id']; 
-        
-        header("Location: school/student-dashboard.php");
-	} else {			
-	$message .= "Your Login password is invalid";	
-	}		
-	}  else {	
-	$message .= "Your Login email invalid";	
-	}		
-	}else{		
-	$message .= "Enter your password";		
-	}	
-	}else{			
-	$message .= "Enter your email";		
-	}
-	}	
-	}
-	?>
+    //header("Location: loan.php");
+}
+$message = '';
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if(isset($_POST['adminlogin'])){
+        if(!empty($_POST['username'])){
+            if(!empty($_POST['password'])){
+                $mymailid = mysqli_real_escape_string($conn,$_POST['username']);
+                $mypassword = mysqli_real_escape_string($conn,$_POST['password']);
+                $row = runQuery("SELECT * FROM users WHERE user_name = '".$mymailid."'");
+                if(!empty($row['id'])){
+                    if(($row['user_password']) == md5($mypassword) ){
+                        $_SESSION['sessionusersid'] = $row['id'];
+
+                        header("Location: school/student-dashboard.php");
+                    } else {
+                        $message .= "Your Login password is invalid";
+                    }
+                }  else {
+                    $message .= "Your Login email invalid";
+                }
+            }else{
+                $message .= "Enter your password";
+            }
+        }else{
+            $message .= "Enter your email";
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
     <meta charset="utf-8">

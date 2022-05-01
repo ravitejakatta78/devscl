@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Exams';
 $subtitle = 'Save Exam Marks';
@@ -28,32 +26,32 @@ $examMarksCondition = (!empty($summary)) ? 1 : 2;
 
 if(!empty($_POST['subject_marks'])){
     if($_POST['examMarksCondition'] == 2) {
-    $marks_summary['exam_id'] = $_POST['examId'];
-    $marks_summary['student_id'] = $_POST['studentId'];
-    $marks_summary['exam_status'] = 1; 
-    $marks_summary['total_marks'] = array_sum($_POST['subject_marks']);
-    $marks_summary['reg_date'] = date('Y-m-d H:i:s');
-    $marks_summary['created_by'] = $userid;
-    $marks_summary['updated_on'] = date('Y-m-d H:i:s');
-    $marks_summary['updated_by'] = $userid;
+        $marks_summary['exam_id'] = $_POST['examId'];
+        $marks_summary['student_id'] = $_POST['studentId'];
+        $marks_summary['exam_status'] = 1;
+        $marks_summary['total_marks'] = array_sum($_POST['subject_marks']);
+        $marks_summary['reg_date'] = date('Y-m-d H:i:s');
+        $marks_summary['created_by'] = $userid;
+        $marks_summary['updated_on'] = date('Y-m-d H:i:s');
+        $marks_summary['updated_by'] = $userid;
 
-    $summary_id = insertIDQuery($marks_summary,'student_marks_summary');
+        $summary_id = insertIDQuery($marks_summary,'student_marks_summary');
 
-    if(!empty($summary_id)){
-        for($m=0;$m<count($_POST['subject_id']);$m++){
-            $marks['summary_marks_id'] = $summary_id;
-            $marks['subject_id'] = $_POST['subject_id'][$m];
-            $marks['marks'] = $_POST['subject_marks'][$m];
-            $marks['reg_date'] = date('Y-m-d H:i:s');
-            $marks['created_by'] = $userid;
-            $marks['updated_on'] = $userid;
-            $marks['updated_by'] = date('Y-m-d H:i:s');
+        if(!empty($summary_id)){
+            for($m=0;$m<count($_POST['subject_id']);$m++){
+                $marks['summary_marks_id'] = $summary_id;
+                $marks['subject_id'] = $_POST['subject_id'][$m];
+                $marks['marks'] = $_POST['subject_marks'][$m];
+                $marks['reg_date'] = date('Y-m-d H:i:s');
+                $marks['created_by'] = $userid;
+                $marks['updated_on'] = $userid;
+                $marks['updated_by'] = date('Y-m-d H:i:s');
 
-            $marks = insertQuery($marks,'student_marks_details');
+                $marks = insertQuery($marks,'student_marks_details');
+            }
         }
     }
-    }
-    else{ 
+    else{
         $update_marks_summary['total_marks'] = array_sum($_POST['subject_marks']);
         $update_marks_summary['updated_on'] = date('Y-m-d H:i:s');
         $update_marks_summary['updated_by'] = $userid;
@@ -72,12 +70,12 @@ if(!empty($_POST['subject_marks'])){
                 $marks['created_by'] = $userid;
                 $marks['updated_on'] = $userid;
                 $marks['updated_by'] = date('Y-m-d H:i:s');
-                
-                insertQuery($marks,'student_marks_details');  
+
+                insertQuery($marks,'student_marks_details');
             }
         }
     }
-    
+
     header('location: exams.php');
 }
 
@@ -89,6 +87,9 @@ where ed.exam_id = '".$exam['id']."'");
 //echo "<pre>";print_r($subjects);exit;
 
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

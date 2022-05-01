@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'School Fee';
 $subtitle = 'Pay Fee List';
@@ -36,9 +34,12 @@ $class = runloopQuery("select * from classes where school_id = '".$school_id."'"
 $paidFeeDetails = runloopQuery ("select spf.*,c.class_name,s.first_name,s.last_name from student_paid_fee as spf 
 inner join classes as c on spf.class_id = c.id 
 inner join students as s on spf.student_id = s.id order by spf.id desc");
- //echo "<pre>";print_r($paidFeeDetails);exit;
+//echo "<pre>";print_r($paidFeeDetails);exit;
 
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

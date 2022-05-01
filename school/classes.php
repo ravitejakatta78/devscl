@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Classes';
 $subtitle = 'Classes List';
@@ -29,16 +27,16 @@ if(!empty($_POST['addclasssub'])) {
     $addclass['created_by'] = $user_name;
 
     $class_id = insertIDQuery($addclass,'classes');
-    
+
     if($class_id) {
         addSections($_POST['section_name'],$_POST['faculity_id'],$class_id,$school_id,$user_name);
     }
 
     if(!empty($class_id)) {
-        $result = ['status' => '1', 'message' => 'Added Successfully'];  
+        $result = ['status' => '1', 'message' => 'Added Successfully'];
     }
     else{
-        $result = ['status' => '0', 'message' => 'Error While Adding']; 
+        $result = ['status' => '0', 'message' => 'Error While Adding'];
     }
 }
 
@@ -87,6 +85,9 @@ $classes_list = runloopQuery("select c.*,f.faculity_name from classes as c inner
 on c.teacher_id = f.id where c.school_id = '".$school_id."'");
 //echo "<pre>";print_r($classes_list);exit;
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Subjects';
 $subtitle = 'Subjects List';
@@ -28,14 +26,14 @@ if(!empty($_POST['addsubjectsub'])) {
     $subjects['created_by'] = $user_name;
     $subjects['updated_by'] = $user_name;
 
-   $subject_id = insertIDQuery($subjects,'subjects');
-   if(!empty($subject_id)) {
+    $subject_id = insertIDQuery($subjects,'subjects');
+    if(!empty($subject_id)) {
         $result = ['status' => '1', 'message' => 'Added Successfully'];
-   }
-   else{
-    $result = ['status' => '0', 'message' => 'Error While Adding Subject'];
-   }
-   
+    }
+    else{
+        $result = ['status' => '0', 'message' => 'Error While Adding Subject'];
+    }
+
 }
 
 if(!empty($_POST['updatesubjectsub'])) {
@@ -45,16 +43,16 @@ if(!empty($_POST['updatesubjectsub'])) {
     $updatesubject['updated_on'] = date('Y-m-d H:i:s A');
     $updatesubject['updated_by'] = $user_name;
     $updatecondition['id'] = $_POST['updatesubjectsub'];
-    $update = updateQuery($updatesubject,'subjects',$updatecondition); 
-    
+    $update = updateQuery($updatesubject,'subjects',$updatecondition);
+
     $result = ['status' => '1', 'message' => 'Updated Successfully'];
-    
+
 }
 
 $subject_list = runloopQuery("select * from subjects where school_id = '".$school_id."'");
-
-
 ?>
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

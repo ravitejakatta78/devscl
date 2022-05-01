@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Students';
 $subtitle = 'Students List';
@@ -23,7 +21,7 @@ $path = '../../school_docs/'.$school_id.'/student_image/';
 if(!empty($_POST['addstudentsubmit'])) {
     $parentDetails = runQuery("select * from parents where phone = '".$_POST['phone']."'");
     if(!empty($parentDetails)){
-        $parent_id = $parentDetails['id']; 
+        $parent_id = $parentDetails['id'];
     }else{
         $parents['parent_name'] = $_POST['parent_name'];
         $parents['parent_type'] = $_POST['parent_type'];
@@ -36,7 +34,7 @@ if(!empty($_POST['addstudentsubmit'])) {
         $parents['created_on'] = date('Y-m-d H:i:s');
         $parents['updated_on'] = date('Y-m-d H:i:s');
         $parents['reg_date'] = date('Y-m-d');
-        $parent_id = insertIDQuery($parents,'parents');    
+        $parent_id = insertIDQuery($parents,'parents');
     }
 
     if(!empty($parent_id)) {
@@ -56,7 +54,7 @@ if(!empty($_POST['addstudentsubmit'])) {
         $students['parent_id'] = $parent_id;
         if(!empty($_FILES['student_img']['name'])){
             $new_name = upload_student_pic($_FILES['student_img'],$path);
-            $students['student_img'] = $new_name;   
+            $students['student_img'] = $new_name;
         }
         $students['created_by'] = $user_name;
         $students['updated_by'] = $user_name;
@@ -69,7 +67,7 @@ if(!empty($_POST['addstudentsubmit'])) {
             $result = ['status' => '1', 'message' => 'Added Student Successfully'];
         }
         else{
-            $result = ['status' => '0', 'message' => 'Error While Adding'];   
+            $result = ['status' => '0', 'message' => 'Error While Adding'];
         }
     }
 }
@@ -99,10 +97,10 @@ if(!empty($_POST['updatestudentsubmit'])){
         if(!empty($students_list['student_img'])){
             unlink($path.'/'.$students_list['student_img']);
         }
-        $updatestudents['student_img'] = $new_name;   
+        $updatestudents['student_img'] = $new_name;
     }
     updateQuery($updatestudents,'students',$updatecondition);
-    
+
     if(!empty($_POST['update_parent_type'])){
         $updateparents['parent_name'] = $_POST['update_parent_name'];
         $updateparents['parent_type'] = $_POST['update_parent_type'];
@@ -122,6 +120,9 @@ on s.parent_id = p.id inner join classes as c on s.student_class = c.id where s.
 //echo "<pre>";print_r($student_details);exit;
 
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

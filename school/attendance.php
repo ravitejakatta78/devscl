@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Attendance';
 $subtitle = 'Classes List';
@@ -24,6 +22,9 @@ $classes = runloopQuery("select * from classes where school_id = '".$school_id."
 //date picker dates
 $sdate = !empty($_POST['sdate']) ? $_POST['sdate'] : date('Y-m-d');
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Schools';
 $subtitle = 'Schools List';
@@ -21,6 +19,9 @@ students as s inner join parents as p on s.parent_id = p.id where s.id = '4'");
 $feeDetails = runloopQuery("select * from student_paid_fee where student_id = '4'");
 //echo "<pre>";print_r($feeDetails);exit;
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

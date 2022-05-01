@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Exams';
 $subtitle = 'Exam Students List';
@@ -19,13 +17,10 @@ $user_name = user_details($userid,'user_name');
 $exam_details = runQuery("select * from exams where id = '".$_POST['examId']."'");
 //echo "<pre>";print_r($exam_details);exit;
 $students = runloopQuery("select * from students where student_class = '".$exam_details['class_id']."'");
-
-//echo "<pre>";print_r($students);exit;
-
-
-
-
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Exams';
 $subtitle = 'Exams List';
@@ -38,7 +36,7 @@ if(!empty($_POST['addexamsub'])){
     }
 
     if(!empty($exam_id)){
-        $result = ['status' => '1', 'message' => 'Added Successfully'];   
+        $result = ['status' => '1', 'message' => 'Added Successfully'];
     }
     else{
         $result = ['status' => '0', 'message' => 'Error While Adding'];
@@ -59,16 +57,19 @@ function addExams($examdate,$subject,$examid,$school_id,$user_name) {
             $exam_details['created_on'] = date('Y-m-d H:i:s');
             $exam_details['created_by'] = $user_name;
             $exam_details['updated_on'] = date('Y-m-d H:i:s');
-            $exam_details['updated_by'] = $user_name; 
+            $exam_details['updated_by'] = $user_name;
             insertQuery($exam_details,'exam_details');
-        }  
+        }
     }
 }
 
 $exam_table = runloopQuery("select e.*,c.class_name from exams as e inner join classes as c
-on e.class_id = c.id where e.school_id = '".$school_id."'"); 
+on e.class_id = c.id where e.school_id = '".$school_id."'");
 //echo "<pre>";print_r($exam_table);exit;
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">

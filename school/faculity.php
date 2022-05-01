@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
 <?php
 session_start();
 
 require_once('../common.php');
 
-$userid = current_userid(); 
+$userid = current_userid();
 if(empty($userid)){
-	header("Location: ../login.php");
+    header("Location: ../login.php");
 }
 $pagetitle = 'Faculity';
 $subtitle = 'Faculity List';
@@ -39,8 +37,8 @@ if(!empty($_POST['addfacsubmit']) &&  ($_POST['randcheck'] == $_SESSION['rand'])
 
 
     $faculity_id = insertIDQuery($faculityadd,'faculity');
-    
-    
+
+
 
     if(!empty($faculity_id)){
         $result = ['status' => '1', 'message' => 'Added Faculity Successfully'];
@@ -49,7 +47,7 @@ if(!empty($_POST['addfacsubmit']) &&  ($_POST['randcheck'] == $_SESSION['rand'])
         $result = ['status' => '0', 'message' => 'Error While Adding Faculity'];
     }
 
-    
+
 }
 
 
@@ -66,7 +64,7 @@ if(!empty($_POST['update_facsubmit'])) {
     $facupdated['address'] = $_POST['update_address'];
     $facupdated['updated_on'] = date('Y-m-d H:i:s');
     $facupdated['updated_by'] = $user_name;
-    $updatecondition['id'] = $_POST['update_facsubmit']; 
+    $updatecondition['id'] = $_POST['update_facsubmit'];
     if(!empty($_FILES['update_faculity_pic']['name'])){
         $new_name = uploadProfilePic($_FILES['update_faculity_pic'],$school_id);
         $facupdated['faculity_pic'] = $new_name;
@@ -79,11 +77,11 @@ $subject_list = runloopQuery("select * from subjects where school_id = '".$schoo
 
 $faculity_list = runloopQuery("select f.*,s.subject_name from faculity as f inner join subjects as s
 on f.subject_id = s.id where f.school_id = '".$school_id."'");
-//echo "<pre>";print_r($faculity_list);exit;
-
-
 
 ?>
+
+<!DOCTYPE html>
+<html>
 <head>
 
         <meta charset="utf-8">
